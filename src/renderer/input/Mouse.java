@@ -1,5 +1,13 @@
 package renderer.input;
 
+/** 
+ * Monitors input for the user's mouse
+ * @author MeanRollerCoding (Youtube)
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;

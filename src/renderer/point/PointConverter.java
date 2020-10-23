@@ -1,5 +1,13 @@
 package renderer.point;
 
+/** 
+ * Static class to render a 3D space onto a 2D viewport
+ * @author MeanRollerCoding (Youtube)
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 import java.awt.Point;
 
 import renderer.Display;

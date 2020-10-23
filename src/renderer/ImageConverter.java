@@ -1,7 +1,14 @@
 package renderer;
 
+/** 
+ * Handles importing and exporting images to the 3D space
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +19,24 @@ import renderer.shapes.Tetrahedron;
 
 public class ImageConverter {
 
-	public static BufferedImage render(Graphics g, int width, int height) {
+	/**
+	 * Outputs a BufferedImage of the given graphics view.
+	 * @param g The graphics object to export to a BufferedImage.
+	 * @param width The width the exported BufferedImage should be.
+	 * @param height The height the exported BufferedImage should be.
+	 * @return A BufferedImage of the graphics drawn in g.
+	 */
+	public static BufferedImage render(Graphics2D g, int width, int height) {
 		//TODO figure out how to convert a graphics obj to a BufferedImage
 		return null;
 	}
 	
+	/**
+	 * Turns a given image into a Tetrahedron, each colored pixel being a single Polygon.
+	 * @param image The image to convert into a Tetrahedron.
+	 * @param scale The scale the exported Tetrahedron should be
+	 * @return A Tetrahedron with each pixel being its own Polygon
+	 */
 	public static Tetrahedron imageToTetrahedron(BufferedImage image, double scale) {
 		List<Polygon3d> polygons = new ArrayList<>();
 		

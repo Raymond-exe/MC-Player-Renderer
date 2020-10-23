@@ -1,4 +1,13 @@
 package renderer;
+
+/** 
+ * A viewport for the 3D space
+ * @author MeanRollerCoding (Youtube)
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;

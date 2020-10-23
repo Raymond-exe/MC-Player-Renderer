@@ -1,5 +1,13 @@
 package renderer.point;
 
+/** 
+ * Represents a point in 3D space
+ * @author MeanRollerCoding (Youtube)
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 public class Point3d {
 
 	public double x, y, z;

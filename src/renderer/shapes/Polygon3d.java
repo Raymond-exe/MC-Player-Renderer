@@ -1,5 +1,13 @@
 package renderer.shapes;
 
+/** 
+ * Represents a collection of points in 3d space
+ * @author MeanRollerCoding (Youtube)
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;

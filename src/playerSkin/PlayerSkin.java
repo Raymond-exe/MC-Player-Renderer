@@ -1,5 +1,12 @@
 package playerSkin;
 
+/** 
+ * Represents an player's skin.
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 import java.awt.image.BufferedImage;
 
 import renderer.ImageConverter;
@@ -7,7 +14,7 @@ import renderer.shapes.ObjectGroup;
 import renderer.shapes.Tetrahedron;
 
 public class PlayerSkin {
-	public static enum skinConfig {STEVE, ALEX};
+	public static enum skinConfig {STEVE, ALEX};	//TODO implement skinConfig usage
 	public static enum facing {FRONT, BACK, LEFT, RIGHT, TOP, BOTTOM};
 	public static enum bodyPart {HEAD, CHEST, L_ARM, R_ARM, L_LEG, R_LEG};
 	public static enum layer {BASE, OVERLAY, BOTH};
@@ -15,25 +22,50 @@ public class PlayerSkin {
 	private BufferedImage skinFile;
 	private skinConfig skinType;
 	
-
+	/** 
+	 * Creates a playerSkin object for the specified player
+	 * @param uuid The player's 32-character unique identifier
+	 */
 	public PlayerSkin(String uuid) {
 		this(uuid, skinConfig.STEVE);
 	}
 	
+	/** 
+	 * Creates a playerSkin object for the specified player
+	 * @param uuid The player's 32-character unique identifier
+	 * @param type The configuration of the skin (steve or alex)
+	 */
 	public PlayerSkin(String uuid, skinConfig type) {
 		this.skinFile = PlayerSkinGrabber.getSkin(uuid);
 		this.skinType = type;
 	}
 	
+	/** 
+	 * Creates a playerSkin object for the specified player
+	 * @param skinFile an image of the pre-existing skin
+	 */
 	public PlayerSkin(BufferedImage skinFile) {
 		this(skinFile, skinConfig.STEVE);
 	}
 	
+	/** 
+	 * Creates a playerSkin object for the specified player
+	 * @param skinFile an image of the pre-existing skin
+	 * @param type The configuration of the skin (steve or alex)
+	 */		
 	public PlayerSkin(BufferedImage skinFile, skinConfig type) {
 		this.skinFile = skinFile;
 		this.skinType = type;
 	}
 	
+	/** 
+	 * Gets a BufferedImage of the specified part of the players skin.
+	 * @param limb Specifies which limb to focus in on.
+	 * @param side Signifies which side of the specified limb should be returned.
+	 * @param layers Signifies which layer to return. 
+	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
+	 * @return The specified section of this player's skin.
+	*/
 	public BufferedImage get(bodyPart limb, facing side, layer layers) {
 		switch(limb) {
 		case HEAD:
@@ -53,6 +85,13 @@ public class PlayerSkin {
 		}
 	}
 	
+	/** 
+	 * Gets an image of the player's head.
+	 * @param side Specifies which side to return
+	 * @param layers Specifies which layer to return.
+	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
+	 * @return An image of a given side of the player's head
+	 */
 	private BufferedImage getHead(facing side, layer layers) {
 		BufferedImage image;
 		int x;
@@ -97,6 +136,14 @@ public class PlayerSkin {
 		return image;
 	}
 
+	
+	/** 
+	 * Gets an image of the player's chest.
+	 * @param side Specifies which side to return
+	 * @param layers Specifies which layer to return.
+	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
+	 * @return An image of a given side of the player's chest
+	 */
 	private BufferedImage getChest(facing side, layer layers) {
 		BufferedImage image;
 		int x;
@@ -144,7 +191,18 @@ public class PlayerSkin {
 		image = skinFile.getSubimage(x, y, width, height);
 		return image;
 	}
+
 	
+	/** 
+	 * Gets an image of the player's leg.
+	 * @param side Specifies which side to return
+	 * @param layers Specifies which layer to return.
+	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
+	 * @param leftSide Whether or not to refer to the left leg. 
+	 * 		  TRUE will return a specified image of the left leg.
+	 * 		  FALSE will return a specified image of the right leg.
+	 * @return An image of a given side of the player's leg.
+	 */
 	private BufferedImage getLeg(facing side, layer layers, boolean leftSide) {
 		BufferedImage image;
 		int x;
@@ -196,7 +254,18 @@ public class PlayerSkin {
 		image = skinFile.getSubimage(x, y, width, height);
 		return image;
 	}
-
+	
+	
+	/** 
+	 * Gets an image of the player's arm.
+	 * @param side Specifies which side to return
+	 * @param layers Specifies which layer to return.
+	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
+	 * @param leftSide Whether or not to refer to the left arm. 
+	 * 		  TRUE will return a specified image of the left arm.
+	 * 		  FALSE will return a specified image of the right arm.
+	 * @return An image of a given side of the player's arm.
+	 */
 	private BufferedImage getArm(facing side, layer layers, boolean leftSide) {
 		BufferedImage image;
 		boolean steve = skinType == skinConfig.STEVE;
@@ -248,10 +317,18 @@ public class PlayerSkin {
 			x+=16;
 		}
 		
-		image = skinFile.getSubimage(x, y, width, height); //TODO fix this? getting out of bounds (raster) exception
+		image = skinFile.getSubimage(x, y, width, height);
 		return image;
 	}
-
+	
+	
+	/** 
+	 * Gets a constructed model of a given bodypart (made from Tetrahedrons (renderer.shapes.Tetrahedron))
+	 * @param limb Specifies which limb to get a model of
+	 * @param scale Specifies the scale the Tetrahedron limb should be
+	 * @param layers Specifies which layers should be present (layer.BASE, layer.OVERLAY, or layer.BOTH)
+	 * @return An ObjectGroup of Tetrahedrons
+	 */
 	public ObjectGroup getModel(bodyPart limb, double scale, layer layers) {
 		if(layers == layer.BOTH) {
 			return getModel(limb, scale, layer.BASE).merge(getModel(limb, scale, layer.OVERLAY));
@@ -289,6 +366,11 @@ public class PlayerSkin {
 		
 	}
 
+	/** 
+	 * Gets the player's skin as a full, 3d model made up of Tetrahedrons (renderer.shapes.Tetrahedron)
+	 * @param scale Specifies the scale the Tetrahedron model should be
+	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin
+	 */
 	public ObjectGroup getFigure(double scale) {
 		ObjectGroup head = getModel(bodyPart.HEAD, scale, layer.BOTH);
 		ObjectGroup chest = getModel(bodyPart.CHEST, scale, layer.BOTH);
@@ -316,7 +398,16 @@ public class PlayerSkin {
 		lLeg.setRotation(0, -75, 105);
 		rLeg.setRotation(0, -75, 75);
 		
+		//set identifiers
+		head.identifier = "HEAD";
+		chest.identifier = "CHEST";
+		lArm.identifier = "LEFT_ARM";
+		rArm.identifier = "RIGHT_ARM";
+		lLeg.identifier = "LEFT_LEG";
+		rLeg.identifier = "RIGHT_LEG";
+		
 		ObjectGroup output = new ObjectGroup(rLeg, lLeg, rArm, lArm, chest, head);
+		output.identifier = "FIGURE";
 		return output;
 	}
 	

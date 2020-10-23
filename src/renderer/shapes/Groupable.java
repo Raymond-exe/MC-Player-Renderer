@@ -1,11 +1,19 @@
 package renderer.shapes;
 
+/** 
+ * An object that can be grouped into an ObjectGroup
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
 
 public interface Groupable {
 
 	boolean addToGroup(ObjectGroup group);
 	
 	ObjectGroup getParent();
+	
+	void setParent(ObjectGroup objectGroup);
 
 	void move(double deltaX, double deltaY, double deltaZ);
 	

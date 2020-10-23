@@ -1,5 +1,13 @@
 package renderer.shapes;
 
+/** 
+ * Represents a collection of Polygons
+ * @author MeanRollerCoding (Youtube)
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.1
+*/
+
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -154,6 +162,11 @@ public class Tetrahedron implements Groupable {
 	@Override
 	public ObjectGroup getParent() {
 		return parent;
+	}
+	
+	@Override
+	public void setParent(ObjectGroup objectGroup) {
+		parent = objectGroup;
 	}
 	
 }
