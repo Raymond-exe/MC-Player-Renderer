@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import renderer.point.Point3d;
+
 //a class that can hold multiple 3d objects, such
 //as tetrahedrons, and even other object groups
 //and transform them as one
@@ -120,16 +122,14 @@ public class ObjectGroup implements Groupable {
 		return tetras;
 	}
 	
-	/**
-	 * Renders Tetrahedrons in this ObjectGroup (and NOT in any subgroups)
-	 * @param g The Graphics object to render to
-	 */
-	public void render(Graphics g) {
-		for(Groupable obj : children) {
-			if(obj instanceof Tetrahedron) {
-				((Tetrahedron)obj).render(g);
+	public ObjectGroup getChild(String str) {
+		for(Groupable child : children) {
+			if(child instanceof ObjectGroup && ((ObjectGroup)child).identifier.equals(str)) {
+				return (ObjectGroup)child;
 			}
 		}
+		
+		return null;
 	}
 	
 	/**
@@ -164,6 +164,44 @@ public class ObjectGroup implements Groupable {
 	}
 	
 	/**
+	 * Recursively renders the object group by calling itself of any object group children,
+	 * and calling render on any Tetrahedrons
+	 * @param g The Graphics object to render to
+	 */
+	public void recursiveRender(Graphics g) {		
+		sort();
+		ObjectGroup obj;
+		Tetrahedron tetra;
+		
+		for(Groupable child : children) {
+			if(child instanceof ObjectGroup) {
+				((ObjectGroup)child).recursiveRender(g);				
+			} else if (child instanceof Tetrahedron) {
+				((Tetrahedron)child).render(g);
+			}
+		}
+	}
+	
+	/**
+	 * Recursively Lite Renders the given number of Tetrahedrons
+	 * @param g The Graphics object to render to
+	 * @param num The number of Tetrahedrons to render
+	 */
+	public void recursiveLiteRender(Graphics g, int num) {
+		sort();
+		
+		for(Groupable child : children) {
+			if(child instanceof ObjectGroup) {
+				ObjectGroup obj = (ObjectGroup)child;
+				if(obj.containsTetrahedrons())
+					obj.liteRender(g, num);
+				if(obj.containsObjectGroups())
+					obj.recursiveLiteRender(g, num);
+			}
+		}
+	}
+	
+	/**
 	 * Determines whether or not this group (not any sub groups) contains Tetrahedrons
 	 * @return Whether or not this group has Tetrahedrons
 	 */
@@ -187,26 +225,9 @@ public class ObjectGroup implements Groupable {
 	}
 	
 	/**
-	 * Recursively Lite Renders the given number of Tetrahedrons
-	 * @param g The Graphics object to render to
-	 * @param num The number of Tetrahedrons to render
-	 */
-	public void recursiveLiteRender(Graphics g, int num) {
-		for(Groupable child : children) {
-			if(child instanceof ObjectGroup) {
-				ObjectGroup obj = (ObjectGroup)child;
-				if(obj.containsTetrahedrons())
-					obj.liteRender(g, num);
-				if(obj.containsObjectGroups())
-					obj.recursiveLiteRender(g, num);
-			}
-		}
-	}
-	
-	/**
 	 * Sorts Groupables based on which Groupables are closest to the camera
 	 */
-	private void sort() {
+	public void sort() {
 		Collections.sort(children, new GroupableSorter());
 	}
 	
@@ -217,6 +238,7 @@ public class ObjectGroup implements Groupable {
 	public void add(Groupable... group) {
 		for(Groupable g : group) {
 			children.add(g);
+			g.setParent(this);
 		}
 	}
 	
@@ -424,13 +446,14 @@ public class ObjectGroup implements Groupable {
 	 * @return The global y coordinate, NOT relative to the parent ObjectGroup
 	 */
 	public double getGlobalYCoordinate() {
+		
 		if(parent==null) {
-			System.out.println("No parent found for object group \"" + identifier + "\".");
 			return yOrigin;
 		} else {
-			System.out.println("Parent of object group \"" + identifier 
-							 + "\" identified as \"" + getParent().identifier + "\".");
-			return yOrigin*Math.sin(Math.toRadians(parent.getXRotation())) + parent.getGlobalYCoordinate();
+			return yOrigin*Math.sin(Math.toRadians(zRotation))*Math.sin(Math.toRadians(xRotation))
+					- xOrigin*Math.sin(Math.toRadians(zRotation+90))
+					- zOrigin*Math.sin(Math.toRadians(xRotation))
+					+ parent.getGlobalYCoordinate();
 		}
 	}
 	
@@ -445,7 +468,7 @@ public class ObjectGroup implements Groupable {
 			return globalZ;
 		} else {
 			return globalZ + parent.getGlobalZCoordinate();
-		}
+		} //TODO fix
 	}
 
 	@Override
@@ -497,6 +520,42 @@ public class ObjectGroup implements Groupable {
 	 */
 	protected double getZRotation() {
 		return zRotation;
+	}
+	
+	//*
+	public Tetrahedron mergeAll() {
+		Tetrahedron output = new Tetrahedron();
+		
+		for(Groupable child : children) {
+			if(child instanceof Tetrahedron) {
+				output.merge((Tetrahedron)child);
+			} else if (child instanceof ObjectGroup) {
+				output.merge(((ObjectGroup)child).mergeAll());
+			}
+		}
+		
+		return output;
+		
+	} //*/
+	
+	/**
+	 * Returns a String representation of this object group
+	 * @return String data type including this object group's identifier, parent, and children
+	 */
+	public String toString() {
+		StringBuilder output = new StringBuilder();
+		
+		output.append("Identifier: \"" + identifier + "\"\n");
+		output.append("Local X:" + getLocalXCoordinate() + "\t");
+		output.append("Local Y:" + getLocalYCoordinate() + "\t");
+		output.append("Local Z:" + getLocalZCoordinate() + "\n");
+		output.append("Global X:" + getGlobalXCoordinate() + "\t");
+		output.append("Global Y:" + getGlobalYCoordinate() + "\t");
+		output.append("Global Z:" + getGlobalZCoordinate() + "\n");
+		//output.append("Parent: \"" + (parent.identifier==null? parent.identifier : "null") + "\"\n");
+		//output.append("Children (" + children.size() + "): " + children);
+		
+		return output.toString();
 	}
 	
 }

@@ -241,7 +241,7 @@ public class PlayerSkin {
 			return null;
 		}
 		
-		if(!leftSide) {
+		if(leftSide) {
 			x-=16;
 			y-=32;
 			if(layers == layer.OVERLAY) {
@@ -351,7 +351,7 @@ public class PlayerSkin {
 		back.rotate(true, 90, 180, 0);
 		left.rotate(true, 270, 0, 270);
 		right.rotate(true, 270, 0, 90);
-		top.rotate(true, 0, 180, 0);
+		top.rotate(true, 0, 0, 0);
 		bottom.rotate(true, 0, 0, 0);
 		
 		front.setLocation(0, scale*yScale, 0);
@@ -362,6 +362,16 @@ public class PlayerSkin {
 		bottom.setLocation(0, 0, -scale*zScale);
 		
 		ObjectGroup output = new ObjectGroup(front, back, left, right, top, bottom);
+		
+		/*
+		//an attempt to fix off-by-90-degrees bug for arms and legs
+		if(limb == bodyPart.L_ARM
+		|| limb == bodyPart.R_ARM
+		|| limb == bodyPart.L_LEG
+		|| limb == bodyPart.R_LEG) {
+			output.rotate(true, 0, 0, -90);
+		} //*/
+		
 		return output;
 		
 	}

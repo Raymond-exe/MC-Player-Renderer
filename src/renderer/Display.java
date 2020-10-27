@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import playerSkin.PlayerSkin;
 import renderer.input.Mouse;
 import renderer.shapes.ObjectGroup;
+import renderer.shapes.Tetrahedron;
 
 public class Display extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +28,7 @@ public class Display extends Canvas implements Runnable {
 	
 	private Thread thread;
 	private JFrame jFrame;
-	private static String title = "JavaBasic3D";
+	private static String title = "Minecraft Player Renderer";
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
 	private boolean running = false;
@@ -35,7 +36,7 @@ public class Display extends Canvas implements Runnable {
 	private static int initialMouseX;
 	private static int initialMouseY;
 	
-	private static ObjectGroup figure;
+	private static Tetrahedron figure;
 	
 	public Display() {
 		this.jFrame = new JFrame();
@@ -58,8 +59,8 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.setResizable(false);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("76a8f27e10b840eaa1e73b95526b3e16");
-		figure = skin.getFigure(10);
+		PlayerSkin skin = new PlayerSkin("6bed63dbbeda461fa3a2d138fd8e5bf4");
+		figure = skin.getFigure(10).mergeAll();
 		figure.resetLocation();
 		//figure.addTetrahedron(Shapes.getFigure(50));
 		//Shapes.fixFigureRotation(figure.getTetrahedrons());
@@ -120,8 +121,7 @@ public class Display extends Canvas implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		figure.sort();
-		figure.recursiveLiteRender(g, 6);
+		figure.render(g);
 		
 		g.dispose();
 		bs.show();
@@ -133,12 +133,42 @@ public class Display extends Canvas implements Runnable {
 	}
 	
 	private void update() {
+		
+		/*
+		//TEMP just an easier rotation control
+		int xRot = 0, yRot = 0, zRot = 0, sensetivity = 10;
+		
+		switch(mouse.getButton()) {
+		case 1:
+			zRot = sensetivity;
+			break;
+		case 3:
+			zRot = -sensetivity;
+			break;
+		case 4:
+			xRot = -sensetivity;
+			break;
+		case 5:
+			xRot = sensetivity;
+			break;
+		case 2:
+		default:
+			xRot = 0;
+			yRot = 0;
+			zRot = 0;
+			System.out.println(figure.getChild("LEFT_ARM"));
+		}
+
+		figure.rotate(true, xRot, yRot, zRot);
+		mouse.resetButton(); //*/
+		
+		//*
 		if(mouse.getButton()==1) {
 			initialMouseX = mouse.getMouseX();
 			initialMouseY = mouse.getMouseY();
 			mouse.resetButton();
 			Mouse.pressed = true;
-		}
+		} //*/
 		
 		if(Mouse.pressed) {
 			int deltaX = mouse.getMouseX() - initialMouseX;
@@ -146,7 +176,6 @@ public class Display extends Canvas implements Runnable {
 			
 			initialMouseX = mouse.getMouseX();
 			initialMouseY = mouse.getMouseY();
-
 			figure.rotate(true, -deltaY/2.0, 0, -deltaX/2.0);
 		} else {
 			initialMouseX = -1;

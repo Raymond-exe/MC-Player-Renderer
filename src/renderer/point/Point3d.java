@@ -22,4 +22,12 @@ public class Point3d {
 		return new Point3d(x, y, z);
 	}
 	
+	public int getX2d() {
+		return PointConverter.convertPoint(this).x;
+	}
+	
+	public int getY2d() {
+		return PointConverter.convertPoint(this).y;
+	}
+	
 }

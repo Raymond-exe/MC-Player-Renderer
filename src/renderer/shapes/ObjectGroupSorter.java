@@ -20,14 +20,9 @@ public class ObjectGroupSorter implements Comparator<ObjectGroup> {
 	 * 		   or farther from the camera than o2.
 	 */
 	public int compare(ObjectGroup o1, ObjectGroup o2) {
-		ObjectGroup obj1 = (ObjectGroup)o1;		
-		ObjectGroup obj2 = (ObjectGroup)o2;
-		
-		//System.out.println("Comparing " + obj1.getGlobalYCoordinate() + " vs. " + obj2.getGlobalYCoordinate());
-		//*
-		if(obj1.getGlobalYCoordinate() > obj2.getGlobalYCoordinate()) 
+		if(o1.getGlobalYCoordinate() > o2.getGlobalYCoordinate()) 
 			return 1;
-		else if (obj2.getGlobalYCoordinate() > obj1.getGlobalYCoordinate())
+		else if (o2.getGlobalYCoordinate() > o1.getGlobalYCoordinate())
 			return -1;
 		else
 			return 0;

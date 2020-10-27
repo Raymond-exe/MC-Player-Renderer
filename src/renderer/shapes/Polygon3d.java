@@ -32,6 +32,15 @@ public class Polygon3d {
 		}
 	}
 	
+	public Polygon3d(Color color, List<Point3d> pts) {
+		this.color = color;
+		points = new ArrayList<>();
+		
+		for(Point3d p : pts) {
+			this.points.add(p.copy());
+		}
+	}
+
 	public void render(Graphics g) {
 		Polygon poly = new Polygon();
 		
@@ -92,5 +101,9 @@ public class Polygon3d {
 			pt.z+=deltaZ;
 		}
 		
+	}
+	
+	public Polygon3d copy() {
+		return new Polygon3d(color, points);
 	}
 }

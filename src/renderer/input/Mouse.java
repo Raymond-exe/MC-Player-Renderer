@@ -62,8 +62,8 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+	public void mouseClicked(MouseEvent event) {
+		Display.updateMousePos(event.getX(), event.getY());
 		
 	}
 
@@ -81,11 +81,11 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 			break;
 		case 4:
 			PointConverter.increaseFovScale(50);
-			System.out.println("New FOV: " + PointConverter.getFovScale());
+			System.out.println("New FOV: " + PointConverter.getFovScale());//*/
 			break;
 		case 5:
 			PointConverter.decreaseFovScale(50);
-			System.out.println("New FOV: " + PointConverter.getFovScale());
+			System.out.println("New FOV: " + PointConverter.getFovScale()); //*/
 			break;
 		}
 	}

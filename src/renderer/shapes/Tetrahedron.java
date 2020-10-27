@@ -23,12 +23,15 @@ public class Tetrahedron implements Groupable {
 	private ObjectGroup parent;
 	
 	public Tetrahedron(Polygon3d... polygons) {
-		this.polygons = new ArrayList<>();		
-		
+		this();
 		for(Polygon3d poly : polygons) {
 			this.polygons.add(poly);
 		}
-
+	}
+	
+	public Tetrahedron() {
+		this.polygons = new ArrayList<>();
+		
 		xRotation = 0;
 		yRotation = 0;
 		zRotation = 0;
@@ -37,15 +40,8 @@ public class Tetrahedron implements Groupable {
 	}
 	
 	public Tetrahedron(List<Polygon3d> polygons) {
-		this.polygons = new ArrayList<>();
+		this();
 		this.polygons.addAll(polygons);
-		
-		
-		xRotation = 0;
-		yRotation = 0;
-		zRotation = 0;
-		
-		parent = null;
 	}
 
 	public void render(Graphics g) {
@@ -167,6 +163,18 @@ public class Tetrahedron implements Groupable {
 	@Override
 	public void setParent(ObjectGroup objectGroup) {
 		parent = objectGroup;
+	}
+	
+	public List<Polygon3d> getPolygons() {
+		return polygons;
+	}
+	
+	public Tetrahedron merge(Tetrahedron other) {
+		for(Polygon3d poly : other.getPolygons()) {
+			polygons.add(poly.copy());
+		}
+		
+		return this;
 	}
 	
 }
