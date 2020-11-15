@@ -22,9 +22,9 @@ public class ObjectGroupSorter implements Comparator<ObjectGroup> {
 	public int compare(ObjectGroup o1, ObjectGroup o2) {
 		int output = 0;
 		
-		if(o1.getDistanceFromCamera() > o2.getDistanceFromCamera()) 
+		if(o1.getGlobalYCoordinate() > o2.getGlobalYCoordinate()) 
 			output = 1;
-		else if (o2.getDistanceFromCamera() > o1.getDistanceFromCamera())
+		else if (o2.getGlobalYCoordinate() > o1.getGlobalYCoordinate())
 			output = -1;
 		
 		return output;

@@ -58,8 +58,8 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.setResizable(false);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("6bed63dbbeda461fa3a2d138fd8e5bf4");
-		figure = skin.getFigure(10).mergeAll();
+		PlayerSkin skin = new PlayerSkin("bfe1135e0cbc41c482fecb4ea695231e");
+		figure = skin.getFigure(10, 1).mergeAll();
 		figure.resetLocation();
 		//figure.addTetrahedron(Shapes.getFigure(50));
 		//Shapes.fixFigureRotation(figure.getTetrahedrons());

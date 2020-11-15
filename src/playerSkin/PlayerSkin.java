@@ -329,11 +329,11 @@ public class PlayerSkin {
 	 * @param layers Specifies which layers should be present (layer.BASE, layer.OVERLAY, or layer.BOTH)
 	 * @return An ObjectGroup of Tetrahedrons
 	 */
-	public ObjectGroup getModel(BodyPart limb, double scale, Layer layers) {
+	public ObjectGroup getModel(BodyPart limb, double scale, Layer layers, double overlayScale) {
 		if(layers == Layer.BOTH) {
-			return getModel(limb, scale, Layer.BASE).merge(getModel(limb, scale, Layer.OVERLAY));
+			return getModel(limb, scale, Layer.BASE, overlayScale).merge(getModel(limb, scale, Layer.OVERLAY, overlayScale));
 		} else if (layers == Layer.OVERLAY) {
-			scale*=1.125; // default value 1.125
+			scale*=overlayScale; // default value 1.125
 		}
 		
 		int xScale = get(limb, Facing.TOP, layers).getWidth()/2;
@@ -381,15 +381,15 @@ public class PlayerSkin {
 	 * @param scale Specifies the scale the Tetrahedron model should be
 	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin
 	 */
-	public ObjectGroup getFigure(double scale) {
+	public ObjectGroup getFigure(double scale, double overlayScale) {
 		Layer layer = Layer.BOTH; //for debug use
 		
-		ObjectGroup head = getModel(BodyPart.HEAD, scale, layer);
-		ObjectGroup chest = getModel(BodyPart.CHEST, scale, layer);
-		ObjectGroup lArm = getModel(BodyPart.L_ARM, scale, layer);
-		ObjectGroup rArm = getModel(BodyPart.R_ARM, scale, layer);
-		ObjectGroup lLeg = getModel(BodyPart.L_LEG, scale, layer);
-		ObjectGroup rLeg = getModel(BodyPart.R_LEG, scale, layer);
+		ObjectGroup head = getModel(BodyPart.HEAD, scale, layer, overlayScale);
+		ObjectGroup chest = getModel(BodyPart.CHEST, scale, layer, overlayScale);
+		ObjectGroup lArm = getModel(BodyPart.L_ARM, scale, layer, overlayScale);
+		ObjectGroup rArm = getModel(BodyPart.R_ARM, scale, layer, overlayScale);
+		ObjectGroup lLeg = getModel(BodyPart.L_LEG, scale, layer, overlayScale);
+		ObjectGroup rLeg = getModel(BodyPart.R_LEG, scale, layer, overlayScale);
 		
 		//test
 		scale*=4;
@@ -421,6 +421,10 @@ public class PlayerSkin {
 		ObjectGroup output = new ObjectGroup(rLeg, lLeg, rArm, lArm, chest, head);
 		output.identifier = "FIGURE";
 		return output;
+	}
+	
+	public ObjectGroup getFigure(double scale) {
+		return getFigure(scale, 1.125);
 	}
 	
 }
