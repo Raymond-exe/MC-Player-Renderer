@@ -330,9 +330,11 @@ public class PlayerSkin {
 	 * @return An ObjectGroup of Tetrahedrons
 	 */
 	public ObjectGroup getModel(BodyPart limb, double scale, Layer layers, double overlayScale) {
+		boolean hasAlpha = false;
 		if(layers == Layer.BOTH) {
 			return getModel(limb, scale, Layer.BASE, overlayScale).merge(getModel(limb, scale, Layer.OVERLAY, overlayScale));
 		} else if (layers == Layer.OVERLAY) {
+			hasAlpha = true;
 			scale*=overlayScale; // default value 1.125
 		}
 		
@@ -340,12 +342,12 @@ public class PlayerSkin {
 		int yScale = get(limb, Facing.LEFT, layers).getWidth()/2;
 		int zScale = get(limb, Facing.FRONT, layers).getHeight()/2;
 		
-		Tetrahedron front =  ImageConverter.imageToTetrahedron(get(limb, Facing.FRONT, 	layers), scale);
-		Tetrahedron back  =  ImageConverter.imageToTetrahedron(get(limb, Facing.BACK, 	layers), scale);
-		Tetrahedron left  =	 ImageConverter.imageToTetrahedron(get(limb, Facing.LEFT, 	layers), scale);
-		Tetrahedron right =  ImageConverter.imageToTetrahedron(get(limb, Facing.RIGHT, 	layers), scale);
-		Tetrahedron top   =	 ImageConverter.imageToTetrahedron(get(limb, Facing.TOP, 	layers), scale);
-		Tetrahedron bottom = ImageConverter.imageToTetrahedron(get(limb, Facing.BOTTOM, layers), scale);
+		Tetrahedron front =  ImageConverter.imageToTetrahedron(get(limb, Facing.FRONT, 	layers), scale, hasAlpha);
+		Tetrahedron back  =  ImageConverter.imageToTetrahedron(get(limb, Facing.BACK, 	layers), scale, hasAlpha);
+		Tetrahedron left  =	 ImageConverter.imageToTetrahedron(get(limb, Facing.LEFT, 	layers), scale, hasAlpha);
+		Tetrahedron right =  ImageConverter.imageToTetrahedron(get(limb, Facing.RIGHT, 	layers), scale, hasAlpha);
+		Tetrahedron top   =	 ImageConverter.imageToTetrahedron(get(limb, Facing.TOP, 	layers), scale, hasAlpha);
+		Tetrahedron bottom = ImageConverter.imageToTetrahedron(get(limb, Facing.BOTTOM, layers), scale, hasAlpha);
 		
 		front.rotate(true, 270, 0, 0);
 		back.rotate(true, 90, 180, 0);
@@ -381,8 +383,10 @@ public class PlayerSkin {
 	 * @param scale Specifies the scale the Tetrahedron model should be
 	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin
 	 */
-	public ObjectGroup getFigure(double scale, double overlayScale) {
+	public ObjectGroup getFigure(double scale, double overlayScale, SkinPose skinPose) {
 		Layer layer = Layer.BOTH; //for debug use
+		
+		double[][][] pose = skinPose.getValues();
 		
 		ObjectGroup head = getModel(BodyPart.HEAD, scale, layer, overlayScale);
 		ObjectGroup chest = getModel(BodyPart.CHEST, scale, layer, overlayScale);
@@ -391,24 +395,26 @@ public class PlayerSkin {
 		ObjectGroup lLeg = getModel(BodyPart.L_LEG, scale, layer, overlayScale);
 		ObjectGroup rLeg = getModel(BodyPart.R_LEG, scale, layer, overlayScale);
 		
-		//test
+		//LEAVE THIS HERE
 		scale*=4;
-		
-		//SET LOCATIONS
-		head.setLocation(0*scale, 0*scale, 2.5*scale); 
-		chest.setLocation(0*scale, 0*scale, 0*scale);
-		lArm.setLocation(0.838776*scale, -1.5*scale, -0.350786*scale); 
-		rArm.setLocation(0.838776*scale, 1.5*scale, -0.350786*scale);
-		lLeg.setLocation(-1.14952*scale, 0.75*scale, -1.88823*scale);
-		rLeg.setLocation(-1.14952*scale, -0.75*scale, -1.88823*scale);
 
 		//SET ROTATIONS
-		head.setRotation(0, 0, 0);
-		chest.setRotation(0, 0, 0);
-		lArm.setRotation(0, -40, 90);
-		rArm.setRotation(0, -40, 90);
-		lLeg.setRotation(0, -75, 105);
-		rLeg.setRotation(0, -75, 75);
+		head.setRotation(pose[SkinPose.HEAD][SkinPose.ROTATION][0], pose[SkinPose.HEAD][SkinPose.ROTATION][1], pose[SkinPose.HEAD][SkinPose.ROTATION][2]);
+		chest.setRotation(pose[SkinPose.CHEST][SkinPose.ROTATION][0], pose[SkinPose.CHEST][SkinPose.ROTATION][1], pose[SkinPose.CHEST][SkinPose.ROTATION][2]);
+		lArm.setRotation(pose[SkinPose.LEFT_ARM][SkinPose.ROTATION][0], pose[SkinPose.LEFT_ARM][SkinPose.ROTATION][1], pose[SkinPose.LEFT_ARM][SkinPose.ROTATION][2]);
+		rArm.setRotation(pose[SkinPose.RIGHT_ARM][SkinPose.ROTATION][0], pose[SkinPose.RIGHT_ARM][SkinPose.ROTATION][1], pose[SkinPose.RIGHT_ARM][SkinPose.ROTATION][2]);
+		lLeg.setRotation(pose[SkinPose.LEFT_LEG][SkinPose.ROTATION][0], pose[SkinPose.LEFT_LEG][SkinPose.ROTATION][1], pose[SkinPose.LEFT_LEG][SkinPose.ROTATION][2]);
+		rLeg.setRotation(pose[SkinPose.RIGHT_LEG][SkinPose.ROTATION][0], pose[SkinPose.RIGHT_LEG][SkinPose.ROTATION][1], pose[SkinPose.RIGHT_LEG][SkinPose.ROTATION][2]);
+		
+		
+		//SET LOCATIONS
+		head.setLocation(pose[SkinPose.HEAD][SkinPose.LOCATION][0]*scale, pose[SkinPose.HEAD][SkinPose.LOCATION][1]*scale, pose[SkinPose.HEAD][SkinPose.LOCATION][2]*scale); 
+		chest.setLocation(pose[SkinPose.CHEST][SkinPose.LOCATION][0]*scale, pose[SkinPose.CHEST][SkinPose.LOCATION][1]*scale, pose[SkinPose.CHEST][SkinPose.LOCATION][2]*scale);
+		lArm.setLocation(pose[SkinPose.LEFT_ARM][SkinPose.LOCATION][0]*scale, pose[SkinPose.LEFT_ARM][SkinPose.LOCATION][1]*scale, pose[SkinPose.LEFT_ARM][SkinPose.LOCATION][2]*scale); 
+		rArm.setLocation(pose[SkinPose.RIGHT_ARM][SkinPose.LOCATION][0]*scale, pose[SkinPose.RIGHT_ARM][SkinPose.LOCATION][1]*scale, pose[SkinPose.RIGHT_ARM][SkinPose.LOCATION][2]*scale);
+		lLeg.setLocation(pose[SkinPose.LEFT_LEG][SkinPose.LOCATION][0]*scale, pose[SkinPose.LEFT_LEG][SkinPose.LOCATION][1]*scale, pose[SkinPose.LEFT_LEG][SkinPose.LOCATION][2]*scale);
+		rLeg.setLocation(pose[SkinPose.RIGHT_LEG][SkinPose.LOCATION][0]*scale, pose[SkinPose.RIGHT_LEG][SkinPose.LOCATION][1]*scale, pose[SkinPose.RIGHT_LEG][SkinPose.LOCATION][2]*scale);
+
 		
 		//set identifiers
 		head.identifier = "HEAD";
@@ -423,8 +429,8 @@ public class PlayerSkin {
 		return output;
 	}
 	
-	public ObjectGroup getFigure(double scale) {
-		return getFigure(scale, 1.125);
+	public ObjectGroup getFigure(double scale, SkinPose pose) {
+		return getFigure(scale, 1.125, pose);
 	}
 	
 }

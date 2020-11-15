@@ -17,6 +17,9 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 import playerSkin.PlayerSkin;
+import playerSkin.PlayerSkin.SkinConfig;
+import playerSkin.SkinPoseSitting;
+import playerSkin.SkinPoseStanding;
 import renderer.input.Mouse;
 import renderer.shapes.Tetrahedron;
 
@@ -58,8 +61,8 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.setResizable(false);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("bfe1135e0cbc41c482fecb4ea695231e");
-		figure = skin.getFigure(10, 1).mergeAll();
+		PlayerSkin skin = new PlayerSkin("a70b3e189f8845969e12f3396b0bbee0", SkinConfig.STEVE);
+		figure = skin.getFigure(10, 1, new SkinPoseSitting()).mergeAll();
 		figure.resetLocation();
 		//figure.addTetrahedron(Shapes.getFigure(50));
 		//Shapes.fixFigureRotation(figure.getTetrahedrons());

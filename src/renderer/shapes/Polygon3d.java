@@ -198,7 +198,6 @@ public class Polygon3d {
 		double distance = Math.abs(deltaX*point.x + deltaY*point.y + deltaZ*point.z + d) /		//numerator
 						  Math.sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ);				//denominator
 		
-		
 		return distance;
 	}
 	

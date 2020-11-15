@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import playerSkin.PlayerSkin;
+import playerSkin.SkinPose;
 import renderer.point.Point3d;
 import renderer.shapes.Polygon3d;
 import renderer.shapes.Tetrahedron;
@@ -26,7 +28,7 @@ public class ImageConverter {
 	 * @param height The height the exported BufferedImage should be.
 	 * @return A BufferedImage of the graphics drawn in g.
 	 */
-	public static BufferedImage render(Graphics2D g, int width, int height) {
+	public static BufferedImage render(PlayerSkin playerSkin, SkinPose skinPose, Graphics2D g, int width, int height) {
 		//TODO figure out how to convert a graphics obj to a BufferedImage
 		return null;
 	}
@@ -37,10 +39,8 @@ public class ImageConverter {
 	 * @param scale The scale the exported Tetrahedron should be
 	 * @return A Tetrahedron with each pixel being its own Polygon
 	 */
-	public static Tetrahedron imageToTetrahedron(BufferedImage image, double scale) {
+	public static Tetrahedron imageToTetrahedron(BufferedImage image, double scale, boolean hasAlpha) {
 		List<Polygon3d> polygons = new ArrayList<>();
-		
-		boolean hasAlpha = image.getColorModel().hasAlpha();
 		double startX = -image.getWidth()*scale/2;
 		double startY = image.getHeight()*scale/2;
 		
