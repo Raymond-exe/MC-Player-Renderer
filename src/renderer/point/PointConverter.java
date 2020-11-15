@@ -16,6 +16,7 @@ public class PointConverter {
 
 	private static double scale = 1;
 	private static int fovScale = 250;
+	private static double cameraDistance = 15; //defaults to 15
 	
 	public static Point convertPoint(Point3d point3d) {
 		double x3d = point3d.x;
@@ -32,7 +33,7 @@ public class PointConverter {
 	private static double[] scale(double x3d, double y3d, double depth) {
 		double dist = Math.sqrt(x3d*x3d + y3d*y3d);
 		double theta = Math.atan2(x3d, y3d);
-		double camDepth = 15-depth; //since the camera is at x pos 15
+		double camDepth = cameraDistance-depth; //since the camera is at x pos 15
 		double localScale = Math.abs(fovScale/(camDepth+fovScale));
 		dist *= localScale;
 		
@@ -84,6 +85,14 @@ public class PointConverter {
 	
 	public static int getFovScale() {
 		return fovScale;
+	}
+	
+	public static double getCameraDistance() {
+		return cameraDistance;
+	}
+	
+	public static void setCameraDistance(double d) {
+		cameraDistance = d;
 	}
 	
 }

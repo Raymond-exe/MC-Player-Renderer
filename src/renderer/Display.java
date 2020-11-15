@@ -18,7 +18,6 @@ import javax.swing.JFrame;
 
 import playerSkin.PlayerSkin;
 import renderer.input.Mouse;
-import renderer.shapes.ObjectGroup;
 import renderer.shapes.Tetrahedron;
 
 public class Display extends Canvas implements Runnable {
@@ -134,41 +133,12 @@ public class Display extends Canvas implements Runnable {
 	
 	private void update() {
 		
-		/*
-		//TEMP just an easier rotation control
-		int xRot = 0, yRot = 0, zRot = 0, sensetivity = 10;
-		
-		switch(mouse.getButton()) {
-		case 1:
-			zRot = sensetivity;
-			break;
-		case 3:
-			zRot = -sensetivity;
-			break;
-		case 4:
-			xRot = -sensetivity;
-			break;
-		case 5:
-			xRot = sensetivity;
-			break;
-		case 2:
-		default:
-			xRot = 0;
-			yRot = 0;
-			zRot = 0;
-			System.out.println(figure.getChild("LEFT_ARM"));
-		}
-
-		figure.rotate(true, xRot, yRot, zRot);
-		mouse.resetButton(); //*/
-		
-		//*
 		if(mouse.getButton()==1) {
 			initialMouseX = mouse.getMouseX();
 			initialMouseY = mouse.getMouseY();
 			mouse.resetButton();
 			Mouse.pressed = true;
-		} //*/
+		}
 		
 		if(Mouse.pressed) {
 			int deltaX = mouse.getMouseX() - initialMouseX;
@@ -177,6 +147,15 @@ public class Display extends Canvas implements Runnable {
 			initialMouseX = mouse.getMouseX();
 			initialMouseY = mouse.getMouseY();
 			figure.rotate(true, -deltaY/2.0, 0, -deltaX/2.0);
+
+			/*
+			System.out.println(figure.getChild("HEAD"));
+			System.out.println(figure.getChild("CHEST"));
+			System.out.println(figure.getChild("LEFT_ARM"));
+			System.out.println(figure.getChild("RIGHT_ARM"));
+			System.out.println(figure.getChild("LEFT_LEG"));
+			System.out.println(figure.getChild("RIGHT_LEG"));
+			*/
 		} else {
 			initialMouseX = -1;
 			initialMouseY = -1;

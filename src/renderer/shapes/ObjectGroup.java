@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import renderer.point.Point3d;
+import renderer.point.PointConverter;
 
 //a class that can hold multiple 3d objects, such
 //as tetrahedrons, and even other object groups
@@ -163,15 +163,18 @@ public class ObjectGroup implements Groupable {
 		}
 	}
 	
+	@Override
+	public void render(Graphics g) {
+		sortObjectGroups();
+		recursiveRender(g);
+	}
+	
 	/**
 	 * Recursively renders the object group by calling itself of any object group children,
 	 * and calling render on any Tetrahedrons
 	 * @param g The Graphics object to render to
 	 */
-	public void recursiveRender(Graphics g) {		
-		sort();
-		ObjectGroup obj;
-		Tetrahedron tetra;
+	private void recursiveRender(Graphics g) {		
 		
 		for(Groupable child : children) {
 			if(child instanceof ObjectGroup) {
@@ -229,6 +232,19 @@ public class ObjectGroup implements Groupable {
 	 */
 	public void sort() {
 		Collections.sort(children, new GroupableSorter());
+	}
+	
+	public void sortObjectGroups() {
+		List<ObjectGroup> sortMe = new ArrayList<>();
+		for(int i = 0; i < children.size(); i++) {
+			if(children.get(i) instanceof ObjectGroup) {
+				((ObjectGroup)children.get(i)).sort();
+				sortMe.add((ObjectGroup)children.remove(i--));
+			}
+		}
+		
+		Collections.sort(sortMe, new ObjectGroupSorter());
+		children.addAll(sortMe);
 	}
 	
 	/**
@@ -432,13 +448,8 @@ public class ObjectGroup implements Groupable {
 	 * @return The global x coordinate, NOT relative to the parent ObjectGroup
 	 */
 	public double getGlobalXCoordinate() {
-		double globalX = xOrigin*Math.cos(Math.toRadians(zRotation));
-		
-		if(parent==null) {
-			return globalX;
-		} else {
-			return globalX + parent.getGlobalXCoordinate();
-		}
+		//TODO calc global coords
+		return xOrigin;
 	}
 	
 	/**
@@ -446,15 +457,10 @@ public class ObjectGroup implements Groupable {
 	 * @return The global y coordinate, NOT relative to the parent ObjectGroup
 	 */
 	public double getGlobalYCoordinate() {
-		
-		if(parent==null) {
-			return yOrigin;
-		} else {
-			return yOrigin*Math.sin(Math.toRadians(zRotation))*Math.sin(Math.toRadians(xRotation))
-					- xOrigin*Math.sin(Math.toRadians(zRotation+90))
-					- zOrigin*Math.sin(Math.toRadians(xRotation))
-					+ parent.getGlobalYCoordinate();
-		}
+		//TODO calc global coords
+		return //yOrigin*Math.sin(Math.toRadians(-xRotation))*Math.sin(Math.toRadians(-zRotation))
+			  xOrigin*Math.cos(Math.toRadians(zRotation));
+			 //+ zOrigin*Math.sin(Math.toDegrees(-xRotation));
 	}
 	
 	/**
@@ -462,13 +468,8 @@ public class ObjectGroup implements Groupable {
 	 * @return The global z coordinate, NOT relative to the parent ObjectGroup
 	 */
 	public double getGlobalZCoordinate() {
-		double globalZ = zOrigin*Math.sin(Math.toRadians(zRotation));
-		
-		if(parent==null) {
-			return globalZ;
-		} else {
-			return globalZ + parent.getGlobalZCoordinate();
-		} //TODO fix
+		//TODO calc global coords
+		return zOrigin;
 	}
 
 	@Override
@@ -477,7 +478,7 @@ public class ObjectGroup implements Groupable {
 	 * @see getGlobalXCoordinate()
 	 */
 	public double getXCoordinate() {
-		return getGlobalXCoordinate();
+		return getLocalXCoordinate();
 	}
 
 	@Override
@@ -495,7 +496,7 @@ public class ObjectGroup implements Groupable {
 	 * @see getGlobalZCoordinate()
 	 */
 	public double getZCoordinate() {
-		return getGlobalZCoordinate();
+		return getLocalZCoordinate();
 	}
 	
 	/**
@@ -545,13 +546,13 @@ public class ObjectGroup implements Groupable {
 	public String toString() {
 		StringBuilder output = new StringBuilder();
 		
-		output.append("Identifier: \"" + identifier + "\"\n");
-		output.append("Local X:" + getLocalXCoordinate() + "\t");
-		output.append("Local Y:" + getLocalYCoordinate() + "\t");
-		output.append("Local Z:" + getLocalZCoordinate() + "\n");
-		output.append("Global X:" + getGlobalXCoordinate() + "\t");
-		output.append("Global Y:" + getGlobalYCoordinate() + "\t");
-		output.append("Global Z:" + getGlobalZCoordinate() + "\n");
+		output.append("Identifier: \"" + identifier + "\"");
+		//output.append("Local X:" + getLocalXCoordinate() + "\t");
+		//output.append("Local Y:" + getLocalYCoordinate() + "\t");
+		//output.append("Local Z:" + getLocalZCoordinate() + "\n");
+		//output.append("Global X:" + getGlobalXCoordinate() + "\t");
+		//output.append("Global Y:" + getGlobalYCoordinate() + "\t");
+		//output.append("Global Z:" + getGlobalZCoordinate() + "");
 		//output.append("Parent: \"" + (parent.identifier==null? parent.identifier : "null") + "\"\n");
 		//output.append("Children (" + children.size() + "): " + children);
 		

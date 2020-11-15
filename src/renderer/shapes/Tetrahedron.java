@@ -44,6 +44,7 @@ public class Tetrahedron implements Groupable {
 		this.polygons.addAll(polygons);
 	}
 
+	@Override
 	public void render(Graphics g) {
 		sortPolygons();
 		for(Polygon3d poly : polygons) {

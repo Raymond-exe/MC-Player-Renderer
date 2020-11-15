@@ -20,18 +20,26 @@ public class PolygonSorter implements Comparator<Polygon3d> {
 	 * 		   or farther from the camera than o2.
 	 */
 	public int compare(Polygon3d o1, Polygon3d o2) {
-		if(!(o1 instanceof Polygon3d && o2 instanceof Polygon3d))
-		return 0;
 		
-		Polygon3d poly1 = (Polygon3d)o1;		
-		Polygon3d poly2 = (Polygon3d)o2;
-		
-		if(poly1.getYAverage() > poly2.getYAverage()) 
-			return 1;
-		else if (poly2.getYAverage() > poly1.getYAverage())
-			return -1;
-		else
-			return 0;
+		if((isBetween(o1.getYMin(), o2.getYMin(), o2.getYMax())
+				|| isBetween(o1.getYMax(), o2.getYMin(), o2.getYMax()))
+				&&(isBetween(o1.getXMin(), o2.getXMin(), o2.getXMax())
+				|| isBetween(o1.getXMax(), o2.getXMin(), o2.getXMax())
+				|| isBetween(o1.getZMin(), o2.getZMin(), o2.getZMax())
+				|| isBetween(o1.getZMax(), o2.getZMin(), o2.getZMax()))) {
+			
+		}
+		return (int)Math.round((o1.getYAverage()-o2.getYAverage())*1000000);
+	}
+	
+	private boolean isBetween(double comparison, double lowerLimit, double upperLimit) {
+		return isBetween(comparison, lowerLimit, upperLimit, true);
+	}
+	
+	private boolean isBetween(double comparison, double lowerLimit, double upperLimit, boolean inclusive) {
+		if(inclusive)
+			return (comparison >= lowerLimit && comparison <= upperLimit);
+		return (comparison > lowerLimit && comparison < upperLimit);
 	}
 
 }

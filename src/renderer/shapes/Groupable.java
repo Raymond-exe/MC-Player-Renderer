@@ -1,5 +1,7 @@
 package renderer.shapes;
 
+import java.awt.Graphics;
+
 /** 
  * An object that can be grouped into an ObjectGroup
  * @author https://github.com/Raymond-exe/
@@ -32,5 +34,7 @@ public interface Groupable {
 	double getYCoordinate();
 	
 	double getZCoordinate();
+	
+	void render(Graphics g);
 	
 }

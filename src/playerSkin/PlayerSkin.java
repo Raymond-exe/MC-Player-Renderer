@@ -14,20 +14,20 @@ import renderer.shapes.ObjectGroup;
 import renderer.shapes.Tetrahedron;
 
 public class PlayerSkin {
-	public static enum skinConfig {STEVE, ALEX};	//TODO implement skinConfig usage
-	public static enum facing {FRONT, BACK, LEFT, RIGHT, TOP, BOTTOM};
-	public static enum bodyPart {HEAD, CHEST, L_ARM, R_ARM, L_LEG, R_LEG};
-	public static enum layer {BASE, OVERLAY, BOTH};
+	public static enum SkinConfig {STEVE, ALEX};	//TODO implement skinConfig usage
+	public static enum Facing {FRONT, BACK, LEFT, RIGHT, TOP, BOTTOM};
+	public static enum BodyPart {HEAD, CHEST, L_ARM, R_ARM, L_LEG, R_LEG};
+	public static enum Layer {BASE, OVERLAY, BOTH};
 	
 	private BufferedImage skinFile;
-	private skinConfig skinType;
+	private SkinConfig skinType;
 	
 	/** 
 	 * Creates a playerSkin object for the specified player
 	 * @param uuid The player's 32-character unique identifier
 	 */
 	public PlayerSkin(String uuid) {
-		this(uuid, skinConfig.STEVE);
+		this(uuid, SkinConfig.STEVE);
 	}
 	
 	/** 
@@ -35,7 +35,7 @@ public class PlayerSkin {
 	 * @param uuid The player's 32-character unique identifier
 	 * @param type The configuration of the skin (steve or alex)
 	 */
-	public PlayerSkin(String uuid, skinConfig type) {
+	public PlayerSkin(String uuid, SkinConfig type) {
 		this.skinFile = PlayerSkinGrabber.getSkin(uuid);
 		this.skinType = type;
 	}
@@ -45,7 +45,7 @@ public class PlayerSkin {
 	 * @param skinFile an image of the pre-existing skin
 	 */
 	public PlayerSkin(BufferedImage skinFile) {
-		this(skinFile, skinConfig.STEVE);
+		this(skinFile, SkinConfig.STEVE);
 	}
 	
 	/** 
@@ -53,7 +53,7 @@ public class PlayerSkin {
 	 * @param skinFile an image of the pre-existing skin
 	 * @param type The configuration of the skin (steve or alex)
 	 */		
-	public PlayerSkin(BufferedImage skinFile, skinConfig type) {
+	public PlayerSkin(BufferedImage skinFile, SkinConfig type) {
 		this.skinFile = skinFile;
 		this.skinType = type;
 	}
@@ -66,7 +66,7 @@ public class PlayerSkin {
 	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
 	 * @return The specified section of this player's skin.
 	*/
-	public BufferedImage get(bodyPart limb, facing side, layer layers) {
+	public BufferedImage get(BodyPart limb, Facing side, Layer layers) {
 		switch(limb) {
 		case HEAD:
 			return getHead(side, layers);
@@ -92,7 +92,7 @@ public class PlayerSkin {
 	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
 	 * @return An image of a given side of the player's head
 	 */
-	private BufferedImage getHead(facing side, layer layers) {
+	private BufferedImage getHead(Facing side, Layer layers) {
 		BufferedImage image;
 		int x;
 		int y;
@@ -128,7 +128,7 @@ public class PlayerSkin {
 			return null;
 		}
 		
-		if(layers == layer.OVERLAY) {
+		if(layers == Layer.OVERLAY) {
 			x+=32;
 		}
 		
@@ -144,7 +144,7 @@ public class PlayerSkin {
 	 * 		  If the given layer is layer.BOTH, the base layer will be returned.
 	 * @return An image of a given side of the player's chest
 	 */
-	private BufferedImage getChest(facing side, layer layers) {
+	private BufferedImage getChest(Facing side, Layer layers) {
 		BufferedImage image;
 		int x;
 		int y;
@@ -184,7 +184,7 @@ public class PlayerSkin {
 			return null;
 		}
 		
-		if(layers == layer.OVERLAY) {
+		if(layers == Layer.OVERLAY) {
 			y+=16;
 		}
 		
@@ -203,7 +203,7 @@ public class PlayerSkin {
 	 * 		  FALSE will return a specified image of the right leg.
 	 * @return An image of a given side of the player's leg.
 	 */
-	private BufferedImage getLeg(facing side, layer layers, boolean leftSide) {
+	private BufferedImage getLeg(Facing side, Layer layers, boolean leftSide) {
 		BufferedImage image;
 		int x;
 		int y;
@@ -244,10 +244,10 @@ public class PlayerSkin {
 		if(leftSide) {
 			x-=16;
 			y-=32;
-			if(layers == layer.OVERLAY) {
+			if(layers == Layer.OVERLAY) {
 				y+= 16;
 			}
-		} else if (layers == layer.OVERLAY) {
+		} else if (layers == Layer.OVERLAY) {
 			x-=16;
 		}
 		
@@ -266,9 +266,9 @@ public class PlayerSkin {
 	 * 		  FALSE will return a specified image of the right arm.
 	 * @return An image of a given side of the player's arm.
 	 */
-	private BufferedImage getArm(facing side, layer layers, boolean leftSide) {
+	private BufferedImage getArm(Facing side, Layer layers, boolean leftSide) {
 		BufferedImage image;
-		boolean steve = skinType == skinConfig.STEVE;
+		boolean steve = skinType == SkinConfig.STEVE;
 		int x;
 		int y;
 		int width = (steve? 4 : 3);	 //width of a minecraft arm in pixels
@@ -310,10 +310,10 @@ public class PlayerSkin {
 		if(!leftSide) {
 			y-=32;
 			x+=8;
-			if(layers == layer.OVERLAY) {
+			if(layers == Layer.OVERLAY) {
 				y+=16;
 			}
-		} else if (layers == layer.OVERLAY) {
+		} else if (layers == Layer.OVERLAY) {
 			x+=16;
 		}
 		
@@ -329,23 +329,23 @@ public class PlayerSkin {
 	 * @param layers Specifies which layers should be present (layer.BASE, layer.OVERLAY, or layer.BOTH)
 	 * @return An ObjectGroup of Tetrahedrons
 	 */
-	public ObjectGroup getModel(bodyPart limb, double scale, layer layers) {
-		if(layers == layer.BOTH) {
-			return getModel(limb, scale, layer.BASE).merge(getModel(limb, scale, layer.OVERLAY));
-		} else if (layers == layer.OVERLAY) {
-			scale*=1.125;
+	public ObjectGroup getModel(BodyPart limb, double scale, Layer layers) {
+		if(layers == Layer.BOTH) {
+			return getModel(limb, scale, Layer.BASE).merge(getModel(limb, scale, Layer.OVERLAY));
+		} else if (layers == Layer.OVERLAY) {
+			scale*=1.125; // default value 1.125
 		}
 		
-		int xScale = get(limb, facing.TOP, layers).getWidth()/2;
-		int yScale = get(limb, facing.LEFT, layers).getWidth()/2;
-		int zScale = get(limb, facing.FRONT, layers).getHeight()/2;
+		int xScale = get(limb, Facing.TOP, layers).getWidth()/2;
+		int yScale = get(limb, Facing.LEFT, layers).getWidth()/2;
+		int zScale = get(limb, Facing.FRONT, layers).getHeight()/2;
 		
-		Tetrahedron front = ImageConverter.imageToTetrahedron(get(limb, facing.FRONT, layers), scale);
-		Tetrahedron back = ImageConverter.imageToTetrahedron(get(limb, facing.BACK, layers), scale);
-		Tetrahedron left = ImageConverter.imageToTetrahedron(get(limb, facing.LEFT, layers), scale);
-		Tetrahedron right = ImageConverter.imageToTetrahedron(get(limb, facing.RIGHT, layers), scale);
-		Tetrahedron top = ImageConverter.imageToTetrahedron(get(limb, facing.TOP, layers), scale);
-		Tetrahedron bottom = ImageConverter.imageToTetrahedron(get(limb, facing.BOTTOM, layers), scale);
+		Tetrahedron front =  ImageConverter.imageToTetrahedron(get(limb, Facing.FRONT, 	layers), scale);
+		Tetrahedron back  =  ImageConverter.imageToTetrahedron(get(limb, Facing.BACK, 	layers), scale);
+		Tetrahedron left  =	 ImageConverter.imageToTetrahedron(get(limb, Facing.LEFT, 	layers), scale);
+		Tetrahedron right =  ImageConverter.imageToTetrahedron(get(limb, Facing.RIGHT, 	layers), scale);
+		Tetrahedron top   =	 ImageConverter.imageToTetrahedron(get(limb, Facing.TOP, 	layers), scale);
+		Tetrahedron bottom = ImageConverter.imageToTetrahedron(get(limb, Facing.BOTTOM, layers), scale);
 		
 		front.rotate(true, 270, 0, 0);
 		back.rotate(true, 90, 180, 0);
@@ -382,15 +382,17 @@ public class PlayerSkin {
 	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin
 	 */
 	public ObjectGroup getFigure(double scale) {
-		ObjectGroup head = getModel(bodyPart.HEAD, scale, layer.BOTH);
-		ObjectGroup chest = getModel(bodyPart.CHEST, scale, layer.BOTH);
-		ObjectGroup lArm = getModel(bodyPart.L_ARM, scale, layer.BOTH);
-		ObjectGroup rArm = getModel(bodyPart.R_ARM, scale, layer.BOTH);
-		ObjectGroup lLeg = getModel(bodyPart.L_LEG, scale, layer.BOTH);
-		ObjectGroup rLeg = getModel(bodyPart.R_LEG, scale, layer.BOTH);
+		Layer layer = Layer.BOTH; //for debug use
+		
+		ObjectGroup head = getModel(BodyPart.HEAD, scale, layer);
+		ObjectGroup chest = getModel(BodyPart.CHEST, scale, layer);
+		ObjectGroup lArm = getModel(BodyPart.L_ARM, scale, layer);
+		ObjectGroup rArm = getModel(BodyPart.R_ARM, scale, layer);
+		ObjectGroup lLeg = getModel(BodyPart.L_LEG, scale, layer);
+		ObjectGroup rLeg = getModel(BodyPart.R_LEG, scale, layer);
 		
 		//test
-		scale*=4.1;
+		scale*=4;
 		
 		//SET LOCATIONS
 		head.setLocation(0*scale, 0*scale, 2.5*scale); 
