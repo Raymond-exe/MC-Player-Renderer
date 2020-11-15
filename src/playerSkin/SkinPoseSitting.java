@@ -52,25 +52,25 @@ public class SkinPoseSitting implements SkinPose {
 
 	@Override
 	public double[] getLeftLegLocation() {
-		double[] output = {0.75, 1.14952, -1.88823};
-		return output; 
-	}
-
-	@Override
-	public double[] getLeftLegRotation() {
-		double[] output = {75, 0, -15};
-		return output; 
-	}
-
-	@Override
-	public double[] getRightLegLocation() {
 		double[] output = {-0.75, 1.14952, -1.88823};
 		return output; 
 	}
 
 	@Override
-	public double[] getRightLegRotation() {
+	public double[] getLeftLegRotation() {
 		double[] output = {75, 0, 15};
+		return output; 
+	}
+
+	@Override
+	public double[] getRightLegLocation() {
+		double[] output = {0.75, 1.14952, -1.88823};
+		return output; 
+	}
+
+	@Override
+	public double[] getRightLegRotation() {
+		double[] output = {75, 0, -15};
 		return output; 
 	}
 }

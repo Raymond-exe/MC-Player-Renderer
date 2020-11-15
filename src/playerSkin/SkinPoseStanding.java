@@ -52,7 +52,7 @@ public class SkinPoseStanding implements SkinPose {
 
 	@Override
 	public double[] getLeftLegLocation() {
-		double[] output = {0.5, 0, -3};
+		double[] output = {-0.5, 0, -3};
 		return output; 
 	}
 
@@ -64,7 +64,7 @@ public class SkinPoseStanding implements SkinPose {
 
 	@Override
 	public double[] getRightLegLocation() {
-		double[] output = {-0.5, 0, -3};
+		double[] output = {0.5, 0, -3};
 		return output; 
 	}
 

@@ -27,7 +27,15 @@ public class PlayerSkin {
 	 * @param uuid The player's 32-character unique identifier
 	 */
 	public PlayerSkin(String uuid) {
-		this(uuid, SkinConfig.STEVE);
+		this.skinFile = PlayerSkinGrabber.getSkin(uuid);
+		
+		// TODO find a way to auto-detect if the user's skin is alex or steve? 
+		// Look into using Mojang API for that
+		/*
+		if(string .contains("\"model\": \"slim\""))
+			skinType = SkinConfig.ALEX;
+		else */
+			skinType = SkinConfig.STEVE;
 	}
 	
 	/** 
