@@ -8,14 +8,22 @@ package renderer;
 */
 
 import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import playerSkin.PlayerSkin;
 import playerSkin.SkinPose;
+import playerSkin.SkinPoseSitting;
+import playerSkin.SkinPoseStanding;
 import renderer.point.Point3d;
+import renderer.point.PointConverter;
 import renderer.shapes.Polygon3d;
 import renderer.shapes.Tetrahedron;
 
@@ -28,9 +36,35 @@ public class ImageConverter {
 	 * @param height The height the exported BufferedImage should be.
 	 * @return A BufferedImage of the graphics drawn in g.
 	 */
-	public static BufferedImage render(PlayerSkin playerSkin, SkinPose skinPose, Graphics2D g, int width, int height) {
-		//TODO figure out how to convert a graphics obj to a BufferedImage
-		return null;
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
+		//Assign width and height to the PointConverter class
+		PointConverter.WIDTH = width;
+		PointConverter.HEIGHT = height;
+		
+		// Preparing image & graphics to draw on
+		BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		
+		// Draw the background image
+		if(background != null)
+			bImage.getGraphics().drawImage(background, 0, 0, bImage.getWidth(), bImage.getHeight(), null);
+		
+		
+		// Preparing the player model
+		Tetrahedron playerModel = playerSkin.getFigure(10, 1, skinPose).mergeAll();
+		playerModel.rotate(true, xRotation, yRotation, zRotation);
+		
+		//draw on graphics object
+		playerModel.render(bImage.getGraphics());
+		
+		//return image
+		return bImage;
+		
+	}
+	
+	public static boolean saveImage(Graphics g, int width, int height) {
+		//BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		//Graphics g = bImage.getGraphics();
+		return false;
 	}
 	
 	/**
@@ -66,5 +100,28 @@ public class ImageConverter {
 		
 		return new Tetrahedron(polygons);		
 	}
+	
+	
+	// main method to test stuff
+	public static void main(String[] args) {
+		try {
+			String imageName = "image.png";
+			File outputfile = new File(imageName);
+			BufferedImage packPng = ImageIO.read(new URL("https://d2skuhm0vrry40.cloudfront.net/2020/articles/2020-09-05-12-48/pack.png"));
+			
+			PointConverter.FOV_SCALE = 200;
+			PointConverter.CAM_DISTANCE = 100;
+			
+			BufferedImage img = renderSkin(new PlayerSkin("7db73360529c4728893540e62334226c"), new SkinPoseSitting(), 0, 0, 0, 256, 256, packPng);
+			
+			ImageIO.write(img, "png", outputfile);
+			
+			System.out.println("Wrote image \"" + imageName + "\" successfully.");
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 }

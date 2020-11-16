@@ -21,6 +21,7 @@ import playerSkin.PlayerSkin.SkinConfig;
 import playerSkin.SkinPoseSitting;
 import playerSkin.SkinPoseStanding;
 import renderer.input.Mouse;
+import renderer.point.PointConverter;
 import renderer.shapes.Tetrahedron;
 
 public class Display extends Canvas implements Runnable {
@@ -31,8 +32,8 @@ public class Display extends Canvas implements Runnable {
 	private Thread thread;
 	private JFrame jFrame;
 	private static String title = "Minecraft Player Renderer";
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
+	private static final int WIDTH = 1280;
+	private static final int HEIGHT = 720;
 	private boolean running = false;
 	private Mouse mouse;
 	private static int initialMouseX;
@@ -43,6 +44,8 @@ public class Display extends Canvas implements Runnable {
 	public Display() {
 		this.jFrame = new JFrame();
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		PointConverter.WIDTH = WIDTH;
+		PointConverter.HEIGHT = HEIGHT;
 		
 		mouse = new Mouse();
 		
@@ -61,7 +64,7 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.setResizable(false);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("a70b3e189f8845969e12f3396b0bbee0", SkinConfig.STEVE);
+		PlayerSkin skin = new PlayerSkin("9ffd8e33e1d54094ba6b2212270b56f8", SkinConfig.STEVE);
 		figure = skin.getFigure(10, 1, new SkinPoseSitting()).mergeAll();
 		figure.resetLocation();
 		//figure.addTetrahedron(Shapes.getFigure(50));
@@ -141,6 +144,10 @@ public class Display extends Canvas implements Runnable {
 			initialMouseY = mouse.getMouseY();
 			mouse.resetButton();
 			Mouse.pressed = true;
+		}
+		
+		if(mouse.getButton()==2) {
+			
 		}
 		
 		if(Mouse.pressed) {

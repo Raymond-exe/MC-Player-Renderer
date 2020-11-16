@@ -14,17 +14,19 @@ import renderer.Display;
 
 public class PointConverter {
 
-	private static double scale = 1;
-	private static int fovScale = 250;
-	private static double cameraDistance = 15; //defaults to 15
+	public static double SCALE = 1;
+	public static int FOV_SCALE = 250;
+	public static double CAM_DISTANCE = 15; //defaults to 15
+	public static int WIDTH;
+	public static int HEIGHT;
 	
 	public static Point convertPoint(Point3d point3d) {
 		double x3d = point3d.x;
 		double y3d = point3d.z;
-		double depth = point3d.y * scale;
+		double depth = point3d.y * SCALE;
 		double[] newVal = scale(x3d, y3d, depth);
-		int x2d = (int)(Display.WIDTH / 2 + newVal[1]);
-		int y2d = (int)(Display.HEIGHT / 2 - newVal[0]);
+		int x2d = (int)(WIDTH / 2 + newVal[1]);
+		int y2d = (int)(HEIGHT / 2 - newVal[0]);
 		
 		Point point2d = new Point(x2d, y2d);
 		return point2d;
@@ -33,8 +35,8 @@ public class PointConverter {
 	private static double[] scale(double x3d, double y3d, double depth) {
 		double dist = Math.sqrt(x3d*x3d + y3d*y3d);
 		double theta = Math.atan2(x3d, y3d);
-		double camDepth = cameraDistance-depth; //since the camera is at x pos 15
-		double localScale = Math.abs(fovScale/(camDepth+fovScale));
+		double camDepth = CAM_DISTANCE-depth; //since the camera is at x pos 15
+		double localScale = Math.abs(FOV_SCALE/(camDepth+FOV_SCALE));
 		dist *= localScale;
 		
 		double[] output = {dist*Math.cos(theta), dist*Math.sin(theta)};
@@ -71,28 +73,28 @@ public class PointConverter {
 	}
 	
 	public static void increaseFovScale(int num) {
-		fovScale+=num;
+		FOV_SCALE+=num;
 	}
 	
 	public static void decreaseFovScale(int num) {
-		fovScale-=num;
+		FOV_SCALE-=num;
 	}
 	
 	public static void adjustZoom(double delta) {
-		scale+=delta;
-		System.out.println("New zoom: " + scale);
+		SCALE+=delta;
+		System.out.println("New zoom: " + SCALE);
 	}
 	
 	public static int getFovScale() {
-		return fovScale;
+		return FOV_SCALE;
 	}
 	
 	public static double getCameraDistance() {
-		return cameraDistance;
+		return CAM_DISTANCE;
 	}
 	
 	public static void setCameraDistance(double d) {
-		cameraDistance = d;
+		CAM_DISTANCE = d;
 	}
 	
 }
