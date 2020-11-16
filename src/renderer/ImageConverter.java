@@ -136,7 +136,7 @@ public class ImageConverter {
 		try {
 			String imageName = "image.png";
 			File outputfile = new File(imageName);
-			BufferedImage packPng = ImageIO.read(new URL("https://d2skuhm0vrry40.cloudfront.net/2020/articles/2020-09-05-12-48/pack.png"));
+			BufferedImage packPng = ImageIO.read(new URL("https://packpng.com/static/pack.png"));
 			
 			PointConverter.FOV_SCALE = 200;
 			PointConverter.CAM_DISTANCE = 100;
