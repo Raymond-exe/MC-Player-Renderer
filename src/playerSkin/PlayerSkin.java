@@ -396,7 +396,7 @@ public class PlayerSkin {
 		Layer layer = Layer.BOTH; //for debug use
 		
 		if(skinPose == null)
-			skinPose = new SkinPoseStanding();
+			skinPose = SkinPose.standing();
 		
 		double[][][] pose = skinPose.getValues();
 		

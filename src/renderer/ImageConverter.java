@@ -19,8 +19,6 @@ import javax.imageio.ImageIO;
 
 import playerSkin.PlayerSkin;
 import playerSkin.SkinPose;
-import playerSkin.SkinPoseSitting;
-import playerSkin.SkinPoseStanding;
 import renderer.point.Point3d;
 import renderer.point.PointConverter;
 import renderer.shapes.Polygon3d;
@@ -54,7 +52,7 @@ public class ImageConverter {
 		
 		// Check to make sure the skinPose exists
 		if(skinPose == null) {
-			skinPose = new SkinPoseStanding();
+			skinPose = SkinPose.standing();
 		}
 		
 		// Preparing the player model
@@ -141,7 +139,7 @@ public class ImageConverter {
 			PointConverter.FOV_SCALE = 200;
 			PointConverter.CAM_DISTANCE = 100;
 			
-			BufferedImage img = renderSkin(new PlayerSkin("7db73360529c4728893540e62334226c"), new SkinPoseSitting(), 0, 0, 0, 256, 256, packPng);
+			BufferedImage img = renderSkin(new PlayerSkin("7db73360529c4728893540e62334226c"), SkinPose.sitting(), 0, 0, 0, 256, 256, packPng);
 			
 			ImageIO.write(img, "png", outputfile);
 			
