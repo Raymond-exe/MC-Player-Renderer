@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import renderer.point.PointConverter;
-
 //a class that can hold multiple 3d objects, such
 //as tetrahedrons, and even other object groups
 //and transform them as one

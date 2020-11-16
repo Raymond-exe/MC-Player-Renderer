@@ -10,8 +10,6 @@ package renderer.point;
 
 import java.awt.Point;
 
-import renderer.Display;
-
 public class PointConverter {
 
 	public static double SCALE = 1;

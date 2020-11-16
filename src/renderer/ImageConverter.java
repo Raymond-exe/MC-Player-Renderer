@@ -8,7 +8,6 @@ package renderer;
 */
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +98,8 @@ public class ImageConverter {
 	/**
 	 * Turns a given image into a Tetrahedron, each colored pixel being a single Polygon.
 	 * @param image The image to convert into a Tetrahedron.
-	 * @param scale The scale the exported Tetrahedron should be
+	 * @param scale The scale the exported Tetrahedron should be.
+	 * @param hasAlpha Whether or not the image should have an alpha value.
 	 * @return A Tetrahedron with each pixel being its own Polygon
 	 */
 	public static Tetrahedron imageToTetrahedron(BufferedImage image, double scale, boolean hasAlpha) {
