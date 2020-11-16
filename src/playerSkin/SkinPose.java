@@ -1,5 +1,12 @@
 package playerSkin;
 
+/** 
+ * Represents an player skin's pose.
+ * @author https://github.com/Raymond-exe/
+ * @version 1.0
+ * @since 0.5
+*/
+
 public interface SkinPose {
 
 	public double[] getHeadLocation();
@@ -25,10 +32,13 @@ public interface SkinPose {
 	public static final int LOCATION = 0;
 	public static final int ROTATION = 1;
 	
+	/**
+	 * Retrieves the location and rotation values of each limb for the skin's pose
+	 * @return location and rotation values of each limb of a PlayerSkin.
+	 */
 	public default double[][][] getValues() {
 		
 		//[LIMB][LOCATION/ROTATION]
-		
 		double[][][] output = {
 					{ getHeadLocation(), getHeadRotation() },
 					{ getChestLocation(), getChestRotation() },

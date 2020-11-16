@@ -389,10 +389,14 @@ public class PlayerSkin {
 	/** 
 	 * Gets the player's skin as a full, 3d model made up of Tetrahedrons (renderer.shapes.Tetrahedron)
 	 * @param scale Specifies the scale the Tetrahedron model should be
+	 * @param overlayScale The scale of the overlay relative to the base layer. Set to 1 to disable.
 	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin
 	 */
 	public ObjectGroup getFigure(double scale, double overlayScale, SkinPose skinPose) {
 		Layer layer = Layer.BOTH; //for debug use
+		
+		if(skinPose == null)
+			skinPose = new SkinPoseStanding();
 		
 		double[][][] pose = skinPose.getValues();
 		
@@ -437,8 +441,23 @@ public class PlayerSkin {
 		return output;
 	}
 	
+	/** 
+	 * Gets the player's skin as a full, 3d model made up of Tetrahedrons (renderer.shapes.Tetrahedron)
+	 * @param scale Specifies the scale the Tetrahedron model should be.
+	 * @param pose The SkinPose the returned figure should take.
+	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin.
+	 */
 	public ObjectGroup getFigure(double scale, SkinPose pose) {
 		return getFigure(scale, 1.125, pose);
+	}
+	
+	/** 
+	 * Gets the player's skin as a full, 3d model made up of Tetrahedrons (renderer.shapes.Tetrahedron)
+	 * @param scale Specifies the scale the Tetrahedron model should be.
+	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin.
+	 */
+	public ObjectGroup getFigure(double scale) {
+		return getFigure(scale, 1.125, null);
 	}
 	
 }

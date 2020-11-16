@@ -3,7 +3,7 @@ package renderer;
 /** 
  * Handles importing and exporting images to the 3D space
  * @author https://github.com/Raymond-exe/
- * @version 1.0
+ * @version 1.1
  * @since 0.1
 */
 
@@ -30,11 +30,16 @@ import renderer.shapes.Tetrahedron;
 public class ImageConverter {
 
 	/**
-	 * Outputs a BufferedImage of the given graphics view.
-	 * @param g The graphics object to export to a BufferedImage.
+	 * Outputs a render of the given PlayerSkin as a BufferedImage.
+	 * @param playerSkin The PlayerSkin object to render.
+	 * @param skinPose the SkinPose that the playerSkin should be rendered as (Null will force the player skin to stand).
+	 * @param xRotation The rotation of the playerSkin along the x-axis.
+	 * @param yRotation The rotation of the playerSkin along the y-axis.
+	 * @param zRotation The rotation of the playerSkin along the z-axis.
 	 * @param width The width the exported BufferedImage should be.
 	 * @param height The height the exported BufferedImage should be.
-	 * @return A BufferedImage of the graphics drawn in g.
+	 * @param background The background image for the playerSkin to be rendered over.
+	 * @return A BufferedImage of the rendered playerSkin.
 	 */
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
 		//Assign width and height to the PointConverter class
@@ -48,6 +53,10 @@ public class ImageConverter {
 		if(background != null)
 			bImage.getGraphics().drawImage(background, 0, 0, bImage.getWidth(), bImage.getHeight(), null);
 		
+		// Check to make sure the skinPose exists
+		if(skinPose == null) {
+			skinPose = new SkinPoseStanding();
+		}
 		
 		// Preparing the player model
 		Tetrahedron playerModel = playerSkin.getFigure(10, 1, skinPose).mergeAll();
@@ -61,10 +70,30 @@ public class ImageConverter {
 		
 	}
 	
-	public static boolean saveImage(Graphics g, int width, int height) {
-		//BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		//Graphics g = bImage.getGraphics();
-		return false;
+	/**
+	 * Outputs a render of the given PlayerSkin as a BufferedImage.
+	 * @param playerSkin The PlayerSkin object to render.
+	 * @param skinPose the SkinPose that the playerSkin should be rendered as (Null will force the player skin to stand).
+	 * @param xRotation The rotation of the playerSkin along the x-axis.
+	 * @param yRotation The rotation of the playerSkin along the y-axis.
+	 * @param zRotation The rotation of the playerSkin along the z-axis.
+	 * @param width The width the exported BufferedImage should be.
+	 * @param height The height the exported BufferedImage should be.
+	 * @return A BufferedImage of the rendered playerSkin.
+	 */
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height) {
+		return renderSkin(playerSkin, skinPose, xRotation, yRotation, zRotation, width, height, null);
+	}
+	
+	/**
+	 * Outputs a render of the given PlayerSkin as a BufferedImage.
+	 * @param playerSkin The PlayerSkin object to render.
+	 * @param width The width the exported BufferedImage should be.
+	 * @param height The height the exported BufferedImage should be.
+	 * @return A BufferedImage of the rendered playerSkin.
+	 */
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, int width, int height) {
+		return renderSkin(playerSkin, null, 0, 0, 0, width, height, null);
 	}
 	
 	/**
