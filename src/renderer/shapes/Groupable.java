@@ -23,7 +23,7 @@ public interface Groupable {
 	
 	void resetLocation();
 	
-	void rotate(boolean CW, double xRotation, double yRotation, double zRotation);
+	void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector);
 	
 	void setRotation(double xRotation, double yRotation, double zRotation);
 	

@@ -31,7 +31,7 @@ public class SkinPose {
 	
 	public SkinPose(String name, double[][][] values) {
 		this(name);
-		this.values = values;
+		this.values = values.clone();
 	}
 	
 	public String getPoseName() {
@@ -41,7 +41,7 @@ public class SkinPose {
 	public double[] get(int limb, int property) {
 		if(limb > RIGHT_LEG || limb < HEAD || (property != LOCATION && property != ROTATION)) {
 			throw new InvalidParameterException();
-		}		
+		}
 		
 		return values[limb][property].clone();
 	}
@@ -76,6 +76,10 @@ public class SkinPose {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public void setVisible(int limb, int property, boolean visible) {
+		//TODO find a way to hide/show certain limbs. I have no idea why, but it might be useful
 	}
 	
 	private int toInt(char c) {

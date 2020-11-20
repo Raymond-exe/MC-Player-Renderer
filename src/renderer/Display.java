@@ -12,7 +12,9 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -20,6 +22,7 @@ import playerSkin.PlayerSkin;
 import playerSkin.PlayerSkin.SkinConfig;
 import playerSkin.SkinPose;
 import renderer.input.Mouse;
+import renderer.point.Point3d;
 import renderer.point.PointConverter;
 import renderer.shapes.Tetrahedron;
 
@@ -31,8 +34,6 @@ public class Display extends Canvas implements Runnable {
 	private Thread thread;
 	private JFrame jFrame;
 	private static String title = "Minecraft Player Renderer";
-	private static final int WIDTH = 1280;
-	private static final int HEIGHT = 720;
 	private boolean running = false;
 	private Mouse mouse;
 	private static int initialMouseX;
@@ -42,9 +43,7 @@ public class Display extends Canvas implements Runnable {
 	
 	public Display() {
 		this.jFrame = new JFrame();
-		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		PointConverter.WIDTH = WIDTH;
-		PointConverter.HEIGHT = HEIGHT;
+		this.setPreferredSize(new Dimension(1280, 720));
 		
 		mouse = new Mouse();
 		
@@ -60,14 +59,16 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.pack();
 		display.jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		display.jFrame.setLocationRelativeTo(null);
-		display.jFrame.setResizable(false);
+		display.jFrame.setResizable(true);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("9ffd8e33e1d54094ba6b2212270b56f8", SkinConfig.STEVE);
-		figure = skin.getFigure(10, 1, SkinPose.standing()).mergeAll();
+		PlayerSkin skin = new PlayerSkin("85f27c00d8a746e8bc9c68cd34b149a9", SkinConfig.STEVE);
+		
+		SkinPose pose = new SkinPose("demo", SkinPose.standing().getValues());
+		//pose.set(SkinPose.LEFT_ARM, SkinPose.LOCATION, 'x', (41.0/30));
+		
+		figure = skin.getFigure(10, 1, pose).mergeAll();
 		figure.resetLocation();
-		//figure.addTetrahedron(Shapes.getFigure(50));
-		//Shapes.fixFigureRotation(figure.getTetrahedrons());
 		display.start();
 	}
 	
@@ -107,13 +108,17 @@ public class Display extends Canvas implements Runnable {
 			//*
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				this.jFrame.setTitle(title + " | " + frames + " fps");
+				this.jFrame.setTitle(title + " | " + frames + " fps | " + getWidth() + "x" + getHeight());
 				frames = 0;
 			} //*/
 		}
 	}
 	
 	private void render() {
+		PointConverter.WIDTH = this.getWidth();
+		PointConverter.HEIGHT = this.getHeight();
+		//PointConverter.CAM_DISTANCE = ((100000*Math.sqrt(Math.abs(PointConverter.SCALE)))/getHeight())-275+0.05*getHeight();
+		
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
 			this.createBufferStrategy(3);
@@ -123,9 +128,11 @@ public class Display extends Canvas implements Runnable {
 		Graphics2D g = (Graphics2D)bs.getDrawGraphics();
 		
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		figure.render(g);
+		ArrayList<PointLight> lights = new ArrayList<>();
+		lights.add(new PointLight(new Point3d(0, 150, 125), 5000, 3));
+		figure.renderLighting(g, 2, lights);
 		
 		g.dispose();
 		bs.show();
@@ -155,7 +162,7 @@ public class Display extends Canvas implements Runnable {
 			
 			initialMouseX = mouse.getMouseX();
 			initialMouseY = mouse.getMouseY();
-			figure.rotate(true, -deltaY/2.0, 0, -deltaX/2.0);
+			figure.rotate(true, -deltaY/2.0, 0, -deltaX/2.0, LightingControl.lightVector);
 
 			/*
 			System.out.println(figure.getChild("HEAD"));

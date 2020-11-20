@@ -9,7 +9,7 @@ package playerSkin;
 
 import java.awt.image.BufferedImage;
 
-import renderer.ImageConverter;
+import imager.ImageConverter;
 import renderer.shapes.ObjectGroup;
 import renderer.shapes.Tetrahedron;
 
@@ -46,6 +46,9 @@ public class PlayerSkin {
 	public PlayerSkin(String uuid, SkinConfig type) {
 		this.skinFile = PlayerSkinGrabber.getSkin(uuid);
 		this.skinType = type;
+		
+		if(this.skinFile==null)
+			System.out.println("Player " + uuid + " not found!");
 	}
 	
 	/** 
@@ -346,8 +349,8 @@ public class PlayerSkin {
 			scale*=overlayScale; // default value 1.125
 		}
 		
-		int xScale = get(limb, Facing.TOP, layers).getWidth()/2;
-		int yScale = get(limb, Facing.LEFT, layers).getWidth()/2;
+		int xScale = get(limb, Facing.FRONT, layers).getWidth()/2;
+		int yScale = get(limb, Facing.TOP, layers).getHeight()/2;
 		int zScale = get(limb, Facing.FRONT, layers).getHeight()/2;
 		
 		Tetrahedron front =  ImageConverter.imageToTetrahedron(get(limb, Facing.FRONT, 	layers), scale, hasAlpha);
@@ -357,12 +360,12 @@ public class PlayerSkin {
 		Tetrahedron top   =	 ImageConverter.imageToTetrahedron(get(limb, Facing.TOP, 	layers), scale, hasAlpha);
 		Tetrahedron bottom = ImageConverter.imageToTetrahedron(get(limb, Facing.BOTTOM, layers), scale, hasAlpha);
 		
-		front.rotate(true, 270, 0, 0);
-		back.rotate(true, 90, 180, 0);
-		left.rotate(true, 270, 0, 270);
-		right.rotate(true, 270, 0, 90);
-		top.rotate(true, 0, 0, 0);
-		bottom.rotate(true, 0, 0, 0);
+		front.rotate(true, 270, 0, 0, null);
+		back.rotate(true, 90, 180, 0, null);
+		left.rotate(true, 270, 0, 270, null);
+		right.rotate(true, 270, 0, 90, null);
+		top.rotate(true, 0, 0, 0, null);
+		bottom.rotate(true, 0, 0, 0, null);
 		
 		front.setLocation(0, scale*yScale, 0);
 		back.setLocation(0, -scale*yScale, 0);
@@ -372,15 +375,6 @@ public class PlayerSkin {
 		bottom.setLocation(0, 0, -scale*zScale);
 		
 		ObjectGroup output = new ObjectGroup(front, back, left, right, top, bottom);
-		
-		/*
-		//an attempt to fix off-by-90-degrees bug for arms and legs
-		if(limb == bodyPart.L_ARM
-		|| limb == bodyPart.R_ARM
-		|| limb == bodyPart.L_LEG
-		|| limb == bodyPart.R_LEG) {
-			output.rotate(true, 0, 0, -90);
-		} //*/
 		
 		return output;
 		
@@ -400,8 +394,8 @@ public class PlayerSkin {
 		
 		double[][][] pose = skinPose.getValues();
 		
-		ObjectGroup head = getModel(BodyPart.HEAD, scale, layer, overlayScale);
-		ObjectGroup chest = getModel(BodyPart.CHEST, scale, layer, overlayScale);
+		ObjectGroup head = getModel(BodyPart.HEAD,  scale, layer, overlayScale);
+		ObjectGroup chest= getModel(BodyPart.CHEST, scale, layer, overlayScale);
 		ObjectGroup lArm = getModel(BodyPart.L_ARM, scale, layer, overlayScale);
 		ObjectGroup rArm = getModel(BodyPart.R_ARM, scale, layer, overlayScale);
 		ObjectGroup lLeg = getModel(BodyPart.L_LEG, scale, layer, overlayScale);

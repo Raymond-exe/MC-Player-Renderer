@@ -1,4 +1,4 @@
-package renderer;
+package imager;
 
 /** 
  * Handles importing and exporting images to the 3D space
@@ -11,7 +11,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,8 @@ import javax.imageio.ImageIO;
 
 import playerSkin.PlayerSkin;
 import playerSkin.SkinPose;
+import renderer.PointLight;
+import renderer.LightingControl;
 import renderer.point.Point3d;
 import renderer.point.PointConverter;
 import renderer.shapes.Polygon3d;
@@ -38,10 +39,13 @@ public class ImageConverter {
 	 * @param background The background image for the playerSkin to be rendered over.
 	 * @return A BufferedImage of the rendered playerSkin.
 	 */
-	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
 		//Assign width and height to the PointConverter class
 		PointConverter.WIDTH = width;
 		PointConverter.HEIGHT = height;
+		PointConverter.FOV_SCALE = 300;
+		PointConverter.SCALE = 0.5;
+		PointConverter.CAM_DISTANCE = ((100000*Math.sqrt(Math.abs(PointConverter.SCALE)))/height)-275+0.05*height;
 		
 		// Preparing image & graphics to draw on
 		BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -57,14 +61,27 @@ public class ImageConverter {
 		
 		// Preparing the player model
 		Tetrahedron playerModel = playerSkin.getFigure(10, 1, skinPose).mergeAll();
-		playerModel.rotate(true, xRotation, yRotation, zRotation);
+		playerModel.rotate(true, 0, 0, zRotation, LightingControl.lightVector);
+		playerModel.rotate(true, 0, yRotation, 0, LightingControl.lightVector);
+		playerModel.rotate(true, xRotation, 0, 0, LightingControl.lightVector);
 		
 		//draw on graphics object
-		playerModel.render(bImage.getGraphics());
+		playerModel.renderLighting(bImage.getGraphics(), 2, lights);
 		
 		//return image
 		return bImage;
 		
+	}
+	
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
+		PointLight light = new PointLight(new Point3d(0,0,125), 10000, 5);
+		ArrayList<PointLight> lights = new ArrayList<>();
+		lights.add(light);
+		return renderSkin(playerSkin, skinPose, lights, xRotation, yRotation, zRotation, width, height, background);
+	}
+	
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height) {
+		return renderSkin(playerSkin, skinPose, lights, xRotation, yRotation, zRotation, width, height, null);
 	}
 	
 	/**
@@ -129,26 +146,27 @@ public class ImageConverter {
 	}
 	
 	
+	/*
 	// main method to test stuff
 	public static void main(String[] args) {
 		try {
-			String imageName = "image.png";
-			File outputfile = new File(imageName);
-			BufferedImage packPng = ImageIO.read(new URL("https://packpng.com/static/pack.png"));
-			
-			PointConverter.FOV_SCALE = 200;
-			PointConverter.CAM_DISTANCE = 100;
-			
-			BufferedImage img = renderSkin(new PlayerSkin("7db73360529c4728893540e62334226c"), SkinPose.sitting(), 0, 0, 0, 256, 256, packPng);
-			
-			ImageIO.write(img, "png", outputfile);
-			
-			System.out.println("Wrote image \"" + imageName + "\" successfully.");
-			
+			for(int i = 500; i <= 5000; i+=500) {
+				int width = i;
+				int height = i;
+				String imageName = "renders/img_" + width + "x" + height + ".png";
+				
+				BufferedImage img = renderSkin(new PlayerSkin("85f27c00d8a746e8bc9c68cd34b149a9"), SkinPose.sitting(), -15, 0, -30, width, height);
+				
+				ImageIO.write(img, "png", new File(imageName));
+				
+				System.out.println("Wrote image \"" + imageName + "\" successfully.");
+				
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	//*/
 	
 	
 }

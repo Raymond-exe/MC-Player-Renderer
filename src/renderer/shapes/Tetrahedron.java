@@ -1,5 +1,7 @@
 package renderer.shapes;
 
+import java.awt.Color;
+
 /** 
  * Represents a collection of Polygons
  * @author MeanRollerCoding (Youtube)
@@ -12,6 +14,10 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import renderer.PointLight;
+import renderer.LightingControl;
+import renderer.point.Point3d;
 
 public class Tetrahedron implements Groupable {
 	
@@ -41,7 +47,9 @@ public class Tetrahedron implements Groupable {
 	
 	public Tetrahedron(List<Polygon3d> polygons) {
 		this();
-		this.polygons.addAll(polygons);
+		for(Polygon3d poly : polygons) {
+			this.polygons.add(poly.copy());
+		}
 	}
 
 	@Override
@@ -50,6 +58,30 @@ public class Tetrahedron implements Groupable {
 		for(Polygon3d poly : polygons) {
 			poly.render(g);
 		}
+	}
+	
+	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources) {
+		
+		//TODO subdivide so that this thing is more even
+		
+		Tetrahedron lightingTetra = this.subdivide(numSubdivisions);
+		for(Polygon3d poly : lightingTetra.polygons) {
+			double shading = lightingSources.get(0).getIntensity(poly.getAverage());
+			
+			for(PointLight light : lightingSources) {
+				if(shading > light.getIntensity(poly.getAverage())) {
+					shading = light.getIntensity(poly.getAverage());
+				}
+			}
+			
+			Color oldPolyColor = poly.getColor();
+			int newRed  = Math.max(0, Math.min(255, (int)(oldPolyColor.getRed() - oldPolyColor.getRed()*shading)));
+			int newGreen= Math.max(0, Math.min(255, (int)(oldPolyColor.getGreen() - oldPolyColor.getGreen()*shading)));
+			int newBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*shading)));
+			poly.setColor(new Color(newRed, newGreen, newBlue, oldPolyColor.getAlpha()));
+		}
+		
+		lightingTetra.render(g);
 	}
 	
 	public void liteRender(Graphics g, int num) {
@@ -63,13 +95,13 @@ public class Tetrahedron implements Groupable {
 		}
 	}
 	
-	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation) {
+	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector) {
 		this.xRotation+=xRotation;
 		this.yRotation+=yRotation;
 		this.zRotation+=zRotation;
 		
 		for(Polygon3d poly : polygons) {
-			poly.rotate(CW, xRotation, yRotation, zRotation);
+			poly.rotate(CW, xRotation, yRotation, zRotation, lightVector);
 		}
 		sortPolygons();
 	}
@@ -80,12 +112,12 @@ public class Tetrahedron implements Groupable {
 		double deltaY = yRotation-this.yRotation;
 		double deltaZ = zRotation-this.zRotation;
 		
-		rotate(true, deltaX, deltaY, deltaZ);
+		rotate(true, deltaX, deltaY, deltaZ, null);
 	}
 
 	@Override
 	public void resetRotation() {
-		rotate(false, xRotation, yRotation, zRotation);
+		rotate(false, xRotation, yRotation, zRotation, null);
 		xRotation = 0;
 		yRotation = 0;
 		zRotation = 0;
@@ -142,6 +174,24 @@ public class Tetrahedron implements Groupable {
 		return zSum / polygons.size();
 	}
 	
+	public Point3d getAverage() {
+		double xSum = 0;
+		double ySum = 0;
+		double zSum = 0;
+		
+		for(Polygon3d poly : polygons) {
+			xSum+=poly.getXAverage();
+			ySum+=poly.getYAverage();
+			zSum+=poly.getZAverage();
+		}
+
+		xSum/=polygons.size();
+		ySum/=polygons.size();
+		zSum/=polygons.size();
+		
+		return new Point3d(xSum, ySum, zSum);
+	}
+	
 	private void sortPolygons() {
 		Collections.sort(polygons, new PolygonSorter());
 	}
@@ -168,6 +218,16 @@ public class Tetrahedron implements Groupable {
 	
 	public List<Polygon3d> getPolygons() {
 		return polygons;
+	}
+	
+	public Tetrahedron subdivide(int numSubdivisions) {
+		Tetrahedron output = new Tetrahedron();
+		
+		for(Polygon3d poly : polygons) {
+			output.merge(poly.subdivide(numSubdivisions));
+		}
+		
+		return output;
 	}
 	
 	public Tetrahedron merge(Tetrahedron other) {

@@ -80,10 +80,16 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 		case 3:
 			break;
 		case 4:
+			PointConverter.CAM_DISTANCE+=10;
+			System.out.println(PointConverter.CAM_DISTANCE);
+			/*
 			PointConverter.increaseFovScale(50);
 			System.out.println("New FOV: " + PointConverter.getFovScale());//*/
 			break;
 		case 5:
+			PointConverter.CAM_DISTANCE-=10;
+			System.out.println(PointConverter.CAM_DISTANCE);
+			/*
 			PointConverter.decreaseFovScale(50);
 			System.out.println("New FOV: " + PointConverter.getFovScale()); //*/
 			break;

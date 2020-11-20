@@ -19,12 +19,13 @@ import renderer.point.Point3d;
 import renderer.point.PointConverter;
 
 public class Polygon3d {
+	//private static final double AMBIENT_LIGHTING = 0.05;
 
-	private Color color;
+	private Color baseColor, lightColor;
 	private List<Point3d> points;
 	
 	public Polygon3d(Color color, Point3d... pts) {
-		this.color = color;
+		this.baseColor = color;
 		points = new ArrayList<>();
 		
 		for(Point3d p : pts) {
@@ -33,7 +34,7 @@ public class Polygon3d {
 	}
 	
 	public Polygon3d(Color color, List<Point3d> pts) {
-		this.color = color;
+		this.baseColor = color;
 		points = new ArrayList<>();
 		
 		for(Point3d p : pts) {
@@ -49,7 +50,7 @@ public class Polygon3d {
 			poly.addPoint(p.x, p.y);
 		}
 		
-		g.setColor(color);
+		g.setColor(baseColor);
 		g.fillPolygon(poly);		
 	}
 		
@@ -80,12 +81,18 @@ public class Polygon3d {
 		return sum/points.size();
 	}
 	
-	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation) {
+	public Point3d getAverage() {
+		return new Point3d(getXAverage(), getYAverage(), getZAverage());
+	}
+	
+	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector) {
 		for (Point3d p : points) {
 			PointConverter.rotateXAxis(p, CW, xRotation);
 			PointConverter.rotateYAxis(p, CW, yRotation);
 			PointConverter.rotateZAxis(p, CW, zRotation);
 		}
+		
+		updateLighting(lightVector);
 		
 	}
 	
@@ -155,8 +162,12 @@ public class Polygon3d {
 		return pointMin.z;
 	}
 
+	public Color getColor() {
+		return baseColor;
+	}
+	
 	public void setColor(Color c) {
-		color = c;		
+		baseColor = c;		
 	}
 
 	public void move(double deltaX, double deltaY, double deltaZ) {
@@ -169,40 +180,70 @@ public class Polygon3d {
 		
 	}
 	
-	public double getNormalDistance(Point3d point) {
-		Point3d ptA = points.get(0);
-		Point3d ptB = null;
-		Point3d ptC = null;
+	public Vector3d getNormal() {
+		Vector3d v1 = new Vector3d(points.get(0), points.get(1));
+		Vector3d v2 = new Vector3d(points.get(1), points.get(2));
+		Vector3d normal = Vector3d.normalize(Vector3d.cross(v2, v1));
 		
-		for(Point3d pt : points) {
-			if(ptA.equals(pt))
-				continue;
-			if(ptB == null || pt.getDistanceFrom(ptA) < ptB.getDistanceFrom(ptA)) {
-				ptB = pt;
-				continue;
-			}
-			if(ptC == null || pt.getDistanceFrom(ptA) < ptC.getDistanceFrom(ptA)) {
-				ptC = pt;
-			}
-		}
-		
-		if(ptB==null || ptC==null)
-			return -1;
-		
-		Vector3d normalVector = (new Vector3d(ptA, ptB)).crossProduct(new Vector3d(ptA, ptC));
-		double deltaX = normalVector.getDeltaX();
-		double deltaY = normalVector.getDeltaY();
-		double deltaZ = normalVector.getDeltaZ();
-		double d = -(deltaX*ptA.x + deltaY*ptA.y + deltaZ*ptA.z);
-		
-		double distance = Math.abs(deltaX*point.x + deltaY*point.y + deltaZ*point.z + d) /		//numerator
-						  Math.sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ);				//denominator
-		
-		return distance;
+		return normal;
 	}
 	
+	public Tetrahedron subdivide(int numSubdivisions) {
+		if(numSubdivisions<=0)
+			return new Tetrahedron(this);
+		
+		Tetrahedron output = new Tetrahedron();
+		
+		////subdivide this object ONCE
+		
+		ArrayList<Polygon3d> newPolygons = new ArrayList<>();
+		//go through each point and...
+		for(Point3d ptA : points) {
+			ArrayList<Point3d> newPolyPoints = new ArrayList<>();
+			//create a new point between itself and all the other points
+			for(Point3d ptB : points) {
+				newPolyPoints.add(Point3d.average(ptA, ptB));
+			}
+			newPolygons.add(new Polygon3d(baseColor, newPolyPoints));
+		}
+		
+		numSubdivisions--;
+		
+		for(Polygon3d poly : newPolygons) {
+			output.merge(poly.subdivide(numSubdivisions));
+		}
+		
+		return output;
+			
+	}
+	
+	private void updateLighting(Vector3d lightVector) {
+		/*
+		if(points.size() < 3 || lightVector == null) {
+			//TODO ?
+			return;
+		}
+		
+		Vector3d normal = getNormal();
+		
+		double dot = Vector3d.dot(normal, lightVector);
+		double sign = (dot<0? -1 : 1);
+		dot = sign*dot*dot;
+		System.out.println("Dot: " + dot);
+		
+		dot = (dot+1) / 2 * 0.95;
+		
+		double lightRatio = AMBIENT_LIGHTING + dot;
+		
+		//Updating lightColor
+		int r = (int)(baseColor.getRed()*lightRatio);
+		int g = (int)(baseColor.getGreen()*lightRatio);
+		int b = (int)(baseColor.getBlue()*lightRatio);
+		lightColor = new Color(r, g, b, baseColor.getAlpha());
+		//*/
+	}	
 	
 	public Polygon3d copy() {
-		return new Polygon3d(color, points);
+		return new Polygon3d(baseColor, points);
 	}
 }
