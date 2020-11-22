@@ -2,6 +2,8 @@ package playerSkin;
 
 import java.security.InvalidParameterException;
 
+import playerSkin.PlayerSkin.SkinConfig;
+
 /** 
  * Represents an player skin's pose.
  * @author https://github.com/Raymond-exe/
@@ -131,6 +133,17 @@ public class SkinPose {
 		return new SkinPose("sitting", poseValues);
 	}
 	
+	public static SkinPose sitting(SkinConfig skinType) {
+		SkinPose output = sitting();
+		
+		if(skinType == SkinConfig.ALEX) {
+			output.set(LEFT_ARM, LOCATION, 'x', (41.0/30));
+			output.set(RIGHT_ARM, LOCATION, 'x', -(41.0/30));
+		}
+		
+		return output;
+	}
+	
 	public static SkinPose standing() {
 									//location, rotation
 		double[][] headValues = 	{{0, 0, 2.5}, {0, 0, 0}};
@@ -143,6 +156,17 @@ public class SkinPose {
 		double[][][] poseValues = {headValues, chestValues, leftArmValues, rightArmValues, leftLegValues, rightLegValues};
 		
 		return new SkinPose("standing", poseValues);
+	}
+	
+	public static SkinPose standing(SkinConfig skinType) {
+		SkinPose output = standing();
+		
+		if(skinType == SkinConfig.ALEX) {
+			output.set(LEFT_ARM, LOCATION, 'x', (41.0/30));
+			output.set(RIGHT_ARM, LOCATION, 'x', -(41.0/30));
+		}
+		
+		return output;
 	}
 	
 	public static SkinPose template() {

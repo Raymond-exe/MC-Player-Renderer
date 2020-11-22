@@ -30,6 +30,8 @@ public class Display extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int FRAMES_PER_SECOND = 60;
+
+	private static final int SUBDIVISIONS = 1;
 	
 	private Thread thread;
 	private JFrame jFrame;
@@ -62,12 +64,12 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.setResizable(true);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("85f27c00d8a746e8bc9c68cd34b149a9", SkinConfig.STEVE);
+		PlayerSkin skin = new PlayerSkin("85f27c00d8a746e8bc9c68cd34b149a9", SkinConfig.ALEX);
 		
 		SkinPose pose = new SkinPose("demo", SkinPose.standing().getValues());
 		//pose.set(SkinPose.LEFT_ARM, SkinPose.LOCATION, 'x', (41.0/30));
 		
-		figure = skin.getFigure(10, 1, pose).mergeAll();
+		figure = skin.getFigure(10, pose).mergeAll();
 		figure.resetLocation();
 		display.start();
 	}
@@ -132,7 +134,7 @@ public class Display extends Canvas implements Runnable {
 		
 		ArrayList<PointLight> lights = new ArrayList<>();
 		lights.add(new PointLight(new Point3d(0, 150, 125), 5000, 3));
-		figure.renderLighting(g, 2, lights);
+		figure.renderLighting(g, SUBDIVISIONS, lights);
 		
 		g.dispose();
 		bs.show();

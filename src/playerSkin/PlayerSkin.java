@@ -14,7 +14,7 @@ import renderer.shapes.ObjectGroup;
 import renderer.shapes.Tetrahedron;
 
 public class PlayerSkin {
-	public static enum SkinConfig {STEVE, ALEX};	//TODO implement skinConfig usage
+	public static enum SkinConfig {STEVE, ALEX};
 	public static enum Facing {FRONT, BACK, LEFT, RIGHT, TOP, BOTTOM};
 	public static enum BodyPart {HEAD, CHEST, L_ARM, R_ARM, L_LEG, R_LEG};
 	public static enum Layer {BASE, OVERLAY, BOTH};
@@ -349,9 +349,9 @@ public class PlayerSkin {
 			scale*=overlayScale; // default value 1.125
 		}
 		
-		int xScale = get(limb, Facing.FRONT, layers).getWidth()/2;
-		int yScale = get(limb, Facing.TOP, layers).getHeight()/2;
-		int zScale = get(limb, Facing.FRONT, layers).getHeight()/2;
+		double xScale = get(limb, Facing.FRONT, layers).getWidth()/2.0;
+		double yScale = get(limb, Facing.TOP, layers).getHeight()/2.0;
+		double zScale = get(limb, Facing.FRONT, layers).getHeight()/2.0;
 		
 		Tetrahedron front =  ImageConverter.imageToTetrahedron(get(limb, Facing.FRONT, 	layers), scale, hasAlpha);
 		Tetrahedron back  =  ImageConverter.imageToTetrahedron(get(limb, Facing.BACK, 	layers), scale, hasAlpha);
