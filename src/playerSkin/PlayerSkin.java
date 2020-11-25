@@ -386,7 +386,7 @@ public class PlayerSkin {
 	 * @param overlayScale The scale of the overlay relative to the base layer. Set to 1 to disable.
 	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin
 	 */
-	public ObjectGroup getFigure(double scale, double overlayScale, SkinPose skinPose) {
+	public ObjectGroup getFigure(double scale, double overlayScale, Float headPitch, Float headYaw, SkinPose skinPose) {
 		Layer layer = Layer.BOTH; //for debug use
 		
 		if(skinPose == null)
@@ -421,6 +421,13 @@ public class PlayerSkin {
 		lLeg.setLocation(pose[SkinPose.LEFT_LEG][SkinPose.LOCATION][0]*scale, pose[SkinPose.LEFT_LEG][SkinPose.LOCATION][1]*scale, pose[SkinPose.LEFT_LEG][SkinPose.LOCATION][2]*scale);
 		rLeg.setLocation(pose[SkinPose.RIGHT_LEG][SkinPose.LOCATION][0]*scale, pose[SkinPose.RIGHT_LEG][SkinPose.LOCATION][1]*scale, pose[SkinPose.RIGHT_LEG][SkinPose.LOCATION][2]*scale);
 
+		//Adjust head pitch & yaw ONLY IF values present
+		if(headPitch != null || headYaw != null) {
+			head.setLocation(0, 0, scale/2);
+			head.setRotation((headPitch==null? 0 : headPitch), 0, 0);
+			head.rotate(true, 0, 0, (headYaw==null? 0 : headYaw), null);
+			head.setLocation(pose[SkinPose.HEAD][SkinPose.LOCATION][0]*scale, pose[SkinPose.HEAD][SkinPose.LOCATION][1]*scale, pose[SkinPose.HEAD][SkinPose.LOCATION][2]*scale);
+		}
 		
 		//set identifiers
 		head.identifier = "HEAD";
@@ -433,6 +440,10 @@ public class PlayerSkin {
 		ObjectGroup output = new ObjectGroup(rLeg, lLeg, rArm, lArm, chest, head);
 		output.identifier = "FIGURE";
 		return output;
+	}
+
+	public ObjectGroup getFigure(double scale, double overlayScale, SkinPose skinPose) {
+		return getFigure(scale, overlayScale, null, null, skinPose);
 	}
 	
 	/** 

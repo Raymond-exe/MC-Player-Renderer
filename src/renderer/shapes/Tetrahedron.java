@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import renderer.PointLight;
-import renderer.LightingControl;
 import renderer.point.Point3d;
 
 public class Tetrahedron implements Groupable {

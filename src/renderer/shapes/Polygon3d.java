@@ -21,7 +21,7 @@ import renderer.point.PointConverter;
 public class Polygon3d {
 	//private static final double AMBIENT_LIGHTING = 0.05;
 
-	private Color baseColor, lightColor;
+	private Color baseColor;
 	private List<Point3d> points;
 	
 	public Polygon3d(Color color, Point3d... pts) {

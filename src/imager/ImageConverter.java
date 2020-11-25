@@ -9,12 +9,12 @@ package imager;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+//import java.io.File;
+//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
+//import javax.imageio.ImageIO;
 
 import playerSkin.PlayerSkin;
 import playerSkin.SkinPose;
@@ -39,7 +39,7 @@ public class ImageConverter {
 	 * @param background The background image for the playerSkin to be rendered over.
 	 * @return A BufferedImage of the rendered playerSkin.
 	 */
-	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
 		//Assign width and height to the PointConverter class
 		PointConverter.WIDTH = width;
 		PointConverter.HEIGHT = height;
@@ -60,17 +60,21 @@ public class ImageConverter {
 		}
 		
 		// Preparing the player model
-		Tetrahedron playerModel = playerSkin.getFigure(10, 1, skinPose).mergeAll();
+		Tetrahedron playerModel = playerSkin.getFigure(10, 1, headPitch, headYaw, skinPose).mergeAll();
 		playerModel.rotate(true, 0, 0, zRotation, LightingControl.lightVector);
 		playerModel.rotate(true, 0, yRotation, 0, LightingControl.lightVector);
 		playerModel.rotate(true, xRotation, 0, 0, LightingControl.lightVector);
 		
 		//draw on graphics object
-		playerModel.renderLighting(bImage.getGraphics(), 2, lights);
+		playerModel.renderLighting(bImage.getGraphics(), 1, lights);
 		
 		//return image
 		return bImage;
 		
+	}
+	
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
+		return renderSkin(playerSkin, skinPose, null, null, lights, xRotation, yRotation, zRotation, width, height, background);
 	}
 	
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
