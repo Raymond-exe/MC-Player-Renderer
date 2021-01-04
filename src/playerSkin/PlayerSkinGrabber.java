@@ -67,20 +67,6 @@ public class PlayerSkinGrabber {
 		}
 	}
 	
-	
-	private static SkinConfig getSkinConfig(String uuid) {
-	    //TODO this method
-		return null;
-		
-		/*
-		UUID uid = UUID.fromString(uuid);
-	    if ((uid.hashCode() & 1) != 0) {
-	      System.out.println(uid.toString() + " = Alex");
-	    } else {
-	      System.out.println(uid.toString() + " = Steve");
-	    } //*/
-	  }
-	
 	private static BufferedImage retrieveImage(String urlAddress) {
 		try {
 			URL url = new URL(urlAddress);	  //makes a new URL object

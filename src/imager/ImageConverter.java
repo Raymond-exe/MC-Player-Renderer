@@ -43,9 +43,9 @@ public class ImageConverter {
 		//Assign width and height to the PointConverter class
 		PointConverter.WIDTH = width;
 		PointConverter.HEIGHT = height;
-		PointConverter.FOV_SCALE = 300;
-		PointConverter.SCALE = 0.5;
-		PointConverter.CAM_DISTANCE = ((100000*Math.sqrt(Math.abs(PointConverter.SCALE)))/height)-275+0.05*height;
+		//PointConverter.FOV_SCALE = 300;
+		//PointConverter.SCALE = 0.3;
+		PointConverter.CAM_DISTANCE = (85000.0/height-205);
 		
 		// Preparing image & graphics to draw on
 		BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -60,7 +60,7 @@ public class ImageConverter {
 		}
 		
 		// Preparing the player model
-		Tetrahedron playerModel = playerSkin.getFigure(10, 1, headPitch, headYaw, skinPose).mergeAll();
+		Tetrahedron playerModel = playerSkin.getFigure(10, headPitch, headYaw, skinPose).mergeAll();
 		playerModel.rotate(true, 0, 0, zRotation, LightingControl.lightVector);
 		playerModel.rotate(true, 0, yRotation, 0, LightingControl.lightVector);
 		playerModel.rotate(true, xRotation, 0, 0, LightingControl.lightVector);

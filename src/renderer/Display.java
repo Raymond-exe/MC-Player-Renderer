@@ -63,10 +63,9 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.setResizable(true);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("85f27c00d8a746e8bc9c68cd34b149a9", SkinConfig.ALEX);
+		PlayerSkin skin = new PlayerSkin("7db73360529c4728893540e62334226c", SkinConfig.ALEX);
 		
 		SkinPose pose = new SkinPose("demo", SkinPose.standing().getValues());
-		//pose.set(SkinPose.LEFT_ARM, SkinPose.LOCATION, 'x', (41.0/30));
 		
 		figure = skin.getFigure(10, pose).mergeAll();
 		figure.resetLocation();
@@ -90,7 +89,6 @@ public class Display extends Canvas implements Runnable {
 	@Override
 	public void run() {
 		long lastTime = System.nanoTime();
-		long timer = System.currentTimeMillis();
 		final double ns = 1000000000.0 / FRAMES_PER_SECOND;
 		double delta = 0;
 		int frames = 0;
@@ -104,21 +102,15 @@ public class Display extends Canvas implements Runnable {
 				delta--;
 				render();
 				frames++;
+				jFrame.setTitle(title + " | " + frames + " fps | " + getWidth() + "x" + getHeight() + " | Cam distance: " + PointConverter.CAM_DISTANCE);
 			}
-			
-			//*
-			if(System.currentTimeMillis() - timer > 1000) {
-				timer += 1000;
-				this.jFrame.setTitle(title + " | " + frames + " fps | " + getWidth() + "x" + getHeight());
-				frames = 0;
-			} //*/
 		}
 	}
 	
 	private void render() {
 		PointConverter.WIDTH = this.getWidth();
 		PointConverter.HEIGHT = this.getHeight();
-		//PointConverter.CAM_DISTANCE = ((100000*Math.sqrt(Math.abs(PointConverter.SCALE)))/getHeight())-275+0.05*getHeight();
+		PointConverter.CAM_DISTANCE = (85000.0/getHeight()-205);
 		
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {

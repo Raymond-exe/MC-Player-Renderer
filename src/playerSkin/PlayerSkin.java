@@ -22,6 +22,8 @@ public class PlayerSkin {
 	private BufferedImage skinFile;
 	private SkinConfig skinType;
 	
+	private static final double DEFAULT_OVERLAY_SCALE = 1.125;
+	
 	/** 
 	 * Creates a playerSkin object for the specified player
 	 * @param uuid The player's 32-character unique identifier
@@ -442,6 +444,10 @@ public class PlayerSkin {
 		return output;
 	}
 
+	public ObjectGroup getFigure(double scale, Float headPitch, Float headYaw, SkinPose skinPose) {
+		return getFigure(scale, DEFAULT_OVERLAY_SCALE, headPitch, headYaw, skinPose);
+	}
+	
 	public ObjectGroup getFigure(double scale, double overlayScale, SkinPose skinPose) {
 		return getFigure(scale, overlayScale, null, null, skinPose);
 	}
@@ -453,7 +459,7 @@ public class PlayerSkin {
 	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin.
 	 */
 	public ObjectGroup getFigure(double scale, SkinPose pose) {
-		return getFigure(scale, 1.125, pose);
+		return getFigure(scale, DEFAULT_OVERLAY_SCALE, pose);
 	}
 	
 	/** 
@@ -462,7 +468,7 @@ public class PlayerSkin {
 	 * @return An ObjectGroup made up of ObjectGroups of Tetrahedrons, making up a figure of the given player's skin.
 	 */
 	public ObjectGroup getFigure(double scale) {
-		return getFigure(scale, 1.125, null);
+		return getFigure(scale, DEFAULT_OVERLAY_SCALE, null);
 	}
 	
 }
