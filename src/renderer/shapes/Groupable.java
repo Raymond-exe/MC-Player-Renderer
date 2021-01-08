@@ -37,4 +37,6 @@ public interface Groupable {
 	
 	void render(Graphics g);
 	
+	void delete();
+	
 }

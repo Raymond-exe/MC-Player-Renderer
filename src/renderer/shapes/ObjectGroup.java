@@ -26,7 +26,7 @@ public class ObjectGroup implements Groupable {
 	public String identifier;	//mostly used for debug purposes, not seen by user
 	
 	private List<Groupable> children;
-	private ObjectGroup parent = null;
+	private ObjectGroup parent;
 	
 	/**
 	 * Creates a new ObjectGroup
@@ -39,6 +39,7 @@ public class ObjectGroup implements Groupable {
 		xRotation = 0;
 		yRotation = 0;
 		zRotation = 0;
+		parent = null;
 	}
 	
 	/**
@@ -555,6 +556,15 @@ public class ObjectGroup implements Groupable {
 		//output.append("Children (" + children.size() + "): " + children);
 		
 		return output.toString();
+	}
+
+	@Override
+	public void delete() {
+		for(int i = 0; i < children.size(); i++) {
+			children.get(i).delete();
+			children.set(i, null);
+		}
+		children = null;
 	}
 	
 }

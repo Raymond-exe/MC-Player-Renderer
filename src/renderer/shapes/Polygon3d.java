@@ -246,4 +246,9 @@ public class Polygon3d {
 	public Polygon3d copy() {
 		return new Polygon3d(baseColor, points);
 	}
+	
+	public void delete() {
+		baseColor = null;
+		points = null;
+	}
 }

@@ -237,4 +237,13 @@ public class Tetrahedron implements Groupable {
 		return this;
 	}
 	
+	@Override
+	public void delete() {
+		for(int i = 0; i < polygons.size(); i++) {
+			polygons.get(i).delete();
+			polygons.set(i, null);
+		}
+		polygons = null;
+	}
+	
 }

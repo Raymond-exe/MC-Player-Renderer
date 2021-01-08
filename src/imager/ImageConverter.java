@@ -45,7 +45,8 @@ public class ImageConverter {
 		PointConverter.HEIGHT = height;
 		//PointConverter.FOV_SCALE = 300;
 		//PointConverter.SCALE = 0.3;
-		PointConverter.CAM_DISTANCE = (85000.0/height-205);
+		PointConverter.CAM_DISTANCE = 85000.0*Math.pow(PointConverter.SCALE, 0.25)/height-205;
+		PointConverter.CAM_DISTANCE /= (250.0/PointConverter.FOV_SCALE);
 		
 		// Preparing image & graphics to draw on
 		BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -67,6 +68,9 @@ public class ImageConverter {
 		
 		//draw on graphics object
 		playerModel.renderLighting(bImage.getGraphics(), 1, lights);
+		
+		//delete all the shit used to render this
+		playerModel.delete();
 		
 		//return image
 		return bImage;

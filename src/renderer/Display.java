@@ -110,7 +110,8 @@ public class Display extends Canvas implements Runnable {
 	private void render() {
 		PointConverter.WIDTH = this.getWidth();
 		PointConverter.HEIGHT = this.getHeight();
-		PointConverter.CAM_DISTANCE = (85000.0/getHeight()-205);
+		PointConverter.CAM_DISTANCE = 85000.0*Math.pow(PointConverter.SCALE, 0.25)/(getHeight())-205;
+		PointConverter.CAM_DISTANCE /= (250.0/PointConverter.FOV_SCALE);
 		
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
