@@ -1,4 +1,4 @@
-package renderer.shapes;
+package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
 /** 
  * Sorter for the Tetrahedron class

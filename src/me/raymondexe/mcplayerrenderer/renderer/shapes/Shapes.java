@@ -1,4 +1,4 @@
-package renderer.shapes;
+package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
 /** 
  * A static class detailing some basic shapes made from Tetrahedrons
@@ -11,7 +11,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Shapes {
 	

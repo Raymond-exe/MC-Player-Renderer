@@ -1,6 +1,6 @@
-package renderer;
+package me.raymondexe.mcplayerrenderer.renderer;
 
-import renderer.shapes.Vector3d;
+import me.raymondexe.mcplayerrenderer.renderer.shapes.Vector3d;
 
 public class LightingControl {
 

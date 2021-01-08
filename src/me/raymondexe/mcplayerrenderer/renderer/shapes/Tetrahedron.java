@@ -1,4 +1,4 @@
-package renderer.shapes;
+package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
 import java.awt.Color;
 
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import renderer.PointLight;
-import renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.PointLight;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Tetrahedron implements Groupable {
 	

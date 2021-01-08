@@ -1,4 +1,4 @@
-package renderer;
+package me.raymondexe.mcplayerrenderer.renderer;
 
 /** 
  * A viewport for the 3D space
@@ -17,13 +17,13 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import playerSkin.PlayerSkin;
-import playerSkin.PlayerSkin.SkinConfig;
-import playerSkin.SkinPose;
-import renderer.input.Mouse;
-import renderer.point.Point3d;
-import renderer.point.PointConverter;
-import renderer.shapes.Tetrahedron;
+import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin;
+import me.raymondexe.mcplayerrenderer.playerSkin.SkinPose;
+import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin.SkinConfig;
+import me.raymondexe.mcplayerrenderer.renderer.input.Mouse;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
+import me.raymondexe.mcplayerrenderer.renderer.shapes.Tetrahedron;
 
 public class Display extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;

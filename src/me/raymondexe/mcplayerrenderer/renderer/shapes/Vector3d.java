@@ -1,6 +1,6 @@
-package renderer.shapes;
+package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
-import renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Vector3d {
 	

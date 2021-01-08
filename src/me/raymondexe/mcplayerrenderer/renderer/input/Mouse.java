@@ -1,4 +1,4 @@
-package renderer.input;
+package me.raymondexe.mcplayerrenderer.renderer.input;
 
 /** 
  * Monitors input for the user's mouse
@@ -14,8 +14,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import renderer.Display;
-import renderer.point.PointConverter;
+import me.raymondexe.mcplayerrenderer.renderer.Display;
+import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 
 public class Mouse implements MouseListener, MouseMotionListener, MouseWheelListener {
 

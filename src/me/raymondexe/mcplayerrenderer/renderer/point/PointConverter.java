@@ -1,4 +1,4 @@
-package renderer.point;
+package me.raymondexe.mcplayerrenderer.renderer.point;
 
 /** 
  * Static class to render a 3D space onto a 2D viewport

@@ -1,4 +1,4 @@
-package imager;
+package me.raymondexe.mcplayerrenderer.imager;
 
 /** 
  * Handles importing and exporting images to the 3D space
@@ -14,16 +14,14 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-//import javax.imageio.ImageIO;
-
-import playerSkin.PlayerSkin;
-import playerSkin.SkinPose;
-import renderer.PointLight;
-import renderer.LightingControl;
-import renderer.point.Point3d;
-import renderer.point.PointConverter;
-import renderer.shapes.Polygon3d;
-import renderer.shapes.Tetrahedron;
+import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin;
+import me.raymondexe.mcplayerrenderer.playerSkin.SkinPose;
+import me.raymondexe.mcplayerrenderer.renderer.LightingControl;
+import me.raymondexe.mcplayerrenderer.renderer.PointLight;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
+import me.raymondexe.mcplayerrenderer.renderer.shapes.Polygon3d;
+import me.raymondexe.mcplayerrenderer.renderer.shapes.Tetrahedron;
 
 public class ImageConverter {
 
@@ -71,6 +69,9 @@ public class ImageConverter {
 		
 		//delete all the shit used to render this
 		playerModel.delete();
+		
+		//TRY to make the garbage collector clean it up
+		System.gc();
 		
 		//return image
 		return bImage;

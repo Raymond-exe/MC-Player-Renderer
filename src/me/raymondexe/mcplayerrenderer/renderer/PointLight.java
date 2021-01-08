@@ -1,6 +1,6 @@
-package renderer;
+package me.raymondexe.mcplayerrenderer.renderer;
 
-import renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class PointLight {
 

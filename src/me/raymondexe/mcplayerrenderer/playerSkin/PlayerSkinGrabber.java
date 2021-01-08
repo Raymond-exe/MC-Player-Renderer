@@ -1,4 +1,4 @@
-package playerSkin;
+package me.raymondexe.mcplayerrenderer.playerSkin;
 
 /** 
  * static class used to retrieve a player's skin as a BufferedImage
@@ -13,7 +13,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import playerSkin.PlayerSkin.SkinConfig;
+import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin.SkinConfig;
 
 public class PlayerSkinGrabber {
 

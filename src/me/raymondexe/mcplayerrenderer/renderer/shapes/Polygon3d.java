@@ -1,4 +1,4 @@
-package renderer.shapes;
+package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
 /** 
  * Represents a collection of points in 3d space
@@ -15,8 +15,8 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-import renderer.point.Point3d;
-import renderer.point.PointConverter;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 
 public class Polygon3d {
 	//private static final double AMBIENT_LIGHTING = 0.05;

@@ -1,4 +1,4 @@
-package playerSkin;
+package me.raymondexe.mcplayerrenderer.playerSkin;
 
 /** 
  * Represents an player's skin.
@@ -9,9 +9,9 @@ package playerSkin;
 
 import java.awt.image.BufferedImage;
 
-import imager.ImageConverter;
-import renderer.shapes.ObjectGroup;
-import renderer.shapes.Tetrahedron;
+import me.raymondexe.mcplayerrenderer.imager.ImageConverter;
+import me.raymondexe.mcplayerrenderer.renderer.shapes.ObjectGroup;
+import me.raymondexe.mcplayerrenderer.renderer.shapes.Tetrahedron;
 
 public class PlayerSkin {
 	public static enum SkinConfig {STEVE, ALEX};

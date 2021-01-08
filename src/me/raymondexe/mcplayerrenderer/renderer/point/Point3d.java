@@ -1,4 +1,4 @@
-package renderer.point;
+package me.raymondexe.mcplayerrenderer.renderer.point;
 
 /** 
  * Represents a point in 3D space

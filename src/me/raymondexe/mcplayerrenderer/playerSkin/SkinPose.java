@@ -1,8 +1,8 @@
-package playerSkin;
+package me.raymondexe.mcplayerrenderer.playerSkin;
 
 import java.security.InvalidParameterException;
 
-import playerSkin.PlayerSkin.SkinConfig;
+import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin.SkinConfig;
 
 /** 
  * Represents an player skin's pose.

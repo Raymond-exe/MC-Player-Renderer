@@ -1,4 +1,4 @@
-package renderer.shapes;
+package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
 /** 
  * A group of 3D objects, being either Tetrahedrons or other ObjectGroups
