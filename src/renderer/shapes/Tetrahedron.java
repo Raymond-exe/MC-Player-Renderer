@@ -239,9 +239,9 @@ public class Tetrahedron implements Groupable {
 	
 	@Override
 	public void delete() {
-		for(int i = 0; i < polygons.size(); i++) {
-			polygons.get(i).delete();
-			polygons.set(i, null);
+		while(polygons.size()>0) {
+			polygons.get(0).delete();
+			polygons.remove(0);
 		}
 		polygons = null;
 	}

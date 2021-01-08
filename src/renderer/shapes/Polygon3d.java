@@ -248,6 +248,9 @@ public class Polygon3d {
 	}
 	
 	public void delete() {
+		while(points.size() > 0)
+			points.remove(0);
+		
 		baseColor = null;
 		points = null;
 	}

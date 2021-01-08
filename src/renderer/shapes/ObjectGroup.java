@@ -560,9 +560,9 @@ public class ObjectGroup implements Groupable {
 
 	@Override
 	public void delete() {
-		for(int i = 0; i < children.size(); i++) {
-			children.get(i).delete();
-			children.set(i, null);
+		while(children.size()>0) {
+			children.get(0).delete();
+			children.remove(0);
 		}
 		children = null;
 	}
