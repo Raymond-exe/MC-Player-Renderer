@@ -33,6 +33,13 @@ public class Point3d {
 		return deltaXYZ;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if(!(o instanceof Point3d))
+			return false;
+		return equals((Point3d)o);
+	}
+	
 	public boolean equals(Point3d other) {
 		boolean matchX = this.x == other.x;
 		boolean matchY = this.y == other.y;
