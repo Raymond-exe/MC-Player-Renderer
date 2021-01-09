@@ -20,20 +20,11 @@ public class PolygonSorter implements Comparator<Polygon3d> {
 	 * 		   or farther from the camera than o2.
 	 */
 	public int compare(Polygon3d o1, Polygon3d o2) {
-		
-		if((isBetween(o1.getYMin(), o2.getYMin(), o2.getYMax())
-				|| isBetween(o1.getYMax(), o2.getYMin(), o2.getYMax()))
-				&&(isBetween(o1.getXMin(), o2.getXMin(), o2.getXMax())
-				|| isBetween(o1.getXMax(), o2.getXMin(), o2.getXMax())
-				|| isBetween(o1.getZMin(), o2.getZMin(), o2.getZMax())
-				|| isBetween(o1.getZMax(), o2.getZMin(), o2.getZMax()))) {
-			
-		}
-		return (int)Math.round((o1.getYAverage()-o2.getYAverage())*1000000);
-	}
-	
-	private boolean isBetween(double comparison, double lowerLimit, double upperLimit) {
-		return isBetween(comparison, lowerLimit, upperLimit, true);
+		if(o1.getYAverage()>o2.getYAverage())
+			return 1;
+		else if (o2.getYAverage()>o1.getYAverage())
+			return -1;
+		return 0;
 	}
 	
 	private boolean isBetween(double comparison, double lowerLimit, double upperLimit, boolean inclusive) {
