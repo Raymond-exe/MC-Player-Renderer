@@ -14,8 +14,8 @@ public class PointLight {
 		power = pow;
 	}
 	
-	public double getIntensity(Point3d point) {
-		double distance = source.getDistanceFrom(point);
+	public double getIntensity(double[] pointCoords) {
+		double distance = source.getDistanceFrom(pointCoords);
 		
 		double intensity = radius*Math.pow(distance/radius, power);
 		

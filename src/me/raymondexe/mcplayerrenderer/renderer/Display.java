@@ -42,6 +42,8 @@ public class Display extends Canvas implements Runnable {
 	
 	private static Tetrahedron figure;
 	
+	private static ArrayList<PointLight> lights;
+	
 	public Display() {
 		this.jFrame = new JFrame();
 		this.setPreferredSize(new Dimension(1280, 720));
@@ -102,7 +104,7 @@ public class Display extends Canvas implements Runnable {
 				delta--;
 				render();
 				frames++;
-				jFrame.setTitle(title + " | " + frames + " fps | " + getWidth() + "x" + getHeight() + " | Cam distance: " + PointConverter.CAM_DISTANCE);
+				jFrame.setTitle(title + " | " + frames + " frames | Points: " + Point3d.getPointCount());
 			}
 		}
 	}
@@ -124,9 +126,13 @@ public class Display extends Canvas implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		ArrayList<PointLight> lights = new ArrayList<>();
-		lights.add(new PointLight(new Point3d(0, 150, 125), 5000, 3));
-		figure.renderLighting(g, SUBDIVISIONS, lights);
+		if(lights==null || lights.isEmpty()) {
+			lights = new ArrayList<>();
+			lights.add(new PointLight(new Point3d(0, 150, 125), 5000, 3));	
+		}
+		
+		figure.render(g);
+		//figure.renderLighting(g, SUBDIVISIONS, lights);
 		
 		g.dispose();
 		bs.show();

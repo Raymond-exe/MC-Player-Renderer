@@ -28,18 +28,13 @@ public class Polygon3d {
 		this.baseColor = color;
 		points = new ArrayList<>();
 		
-		for(Point3d p : pts) {
-			this.points.add(p.copy());
-		}
+		for(int i = 0; i < pts.length; i++)
+			points.add(pts[i]);
 	}
 	
 	public Polygon3d(Color color, List<Point3d> pts) {
 		this.baseColor = color;
-		points = new ArrayList<>();
-		
-		for(Point3d p : pts) {
-			this.points.add(p.copy());
-		}
+		points = pts;
 	}
 
 	public void render(Graphics g) {
@@ -81,8 +76,8 @@ public class Polygon3d {
 		return sum/points.size();
 	}
 	
-	public Point3d getAverage() {
-		return new Point3d(getXAverage(), getYAverage(), getZAverage());
+	public double[] getAverage() {
+		return new double[] {getXAverage(), getYAverage(), getZAverage()};
 	}
 	
 	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector) {

@@ -10,22 +10,32 @@ package me.raymondexe.mcplayerrenderer.renderer.point;
 
 public class Point3d {
 
+	private static int pointCount = 0;
+	
 	public double x, y, z;
 	
 	public Point3d(double x, double y, double z) {
+		pointCount++;
 		this.x = x;
 		this.y = y;
 		this.z = z;
-	}
-	
-	public Point3d copy() {
-		return new Point3d(x, y, z);
 	}
 	
 	public double getDistanceFrom(Point3d other) {
 		double deltaX = x-other.x;
 		double deltaY = y-other.y;
 		double deltaZ = z-other.z;
+		
+		double deltaXY = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+		double deltaXYZ = Math.sqrt(deltaXY*deltaXY + deltaZ*deltaZ);
+		
+		return deltaXYZ;
+	}
+	
+	public double getDistanceFrom(double[] other) {
+		double deltaX = x-other[0];
+		double deltaY = y-other[1];
+		double deltaZ = z-other[2];
 		
 		double deltaXY = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
 		double deltaXYZ = Math.sqrt(deltaXY*deltaXY + deltaZ*deltaZ);
@@ -66,6 +76,10 @@ public class Point3d {
 		double zAvg = (ptA.z + ptB.z)/2.0;
 		
 		return new Point3d(xAvg, yAvg, zAvg);
+	}
+	
+	public static int getPointCount() {
+		return pointCount;
 	}
 	
 }

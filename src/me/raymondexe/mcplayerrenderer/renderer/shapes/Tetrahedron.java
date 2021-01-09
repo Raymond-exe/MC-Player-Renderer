@@ -173,7 +173,7 @@ public class Tetrahedron implements Groupable {
 		return zSum / polygons.size();
 	}
 	
-	public Point3d getAverage() {
+	public double[] getAverage() {
 		double xSum = 0;
 		double ySum = 0;
 		double zSum = 0;
@@ -188,7 +188,7 @@ public class Tetrahedron implements Groupable {
 		ySum/=polygons.size();
 		zSum/=polygons.size();
 		
-		return new Point3d(xSum, ySum, zSum);
+		return new double[]{xSum, ySum, zSum};
 	}
 	
 	private void sortPolygons() {
