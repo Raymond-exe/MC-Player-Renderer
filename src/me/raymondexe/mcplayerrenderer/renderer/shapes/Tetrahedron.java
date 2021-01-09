@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
-import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Tetrahedron implements Groupable {
 	
@@ -57,6 +56,10 @@ public class Tetrahedron implements Groupable {
 		for(Polygon3d poly : polygons) {
 			poly.render(g);
 		}
+	}
+	
+	public void renderLighting(Graphics g, ArrayList<PointLight> lightingSources) {
+		renderLighting(g, 0, lightingSources);
 	}
 	
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources) {

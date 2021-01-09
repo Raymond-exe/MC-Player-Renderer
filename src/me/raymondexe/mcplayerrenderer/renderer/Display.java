@@ -69,7 +69,7 @@ public class Display extends Canvas implements Runnable {
 		
 		SkinPose pose = new SkinPose("demo", SkinPose.standing().getValues());
 		
-		figure = skin.getFigure(10, pose).mergeAll();
+		figure = skin.getFigure(10, pose).mergeAll().subdivide(SUBDIVISIONS);
 		figure.resetLocation();
 		display.start();
 	}
@@ -131,8 +131,8 @@ public class Display extends Canvas implements Runnable {
 			lights.add(new PointLight(new Point3d(0, 150, 125), 5000, 3));	
 		}
 		
-		figure.render(g);
-		//figure.renderLighting(g, SUBDIVISIONS, lights);
+		//figure.render(g);
+		figure.renderLighting(g, lights);
 		
 		g.dispose();
 		bs.show();
