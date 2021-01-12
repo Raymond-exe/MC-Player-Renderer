@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Tetrahedron implements Groupable {
 	
@@ -28,9 +29,7 @@ public class Tetrahedron implements Groupable {
 	
 	public Tetrahedron(Polygon3d... polygons) {
 		this();
-		for(Polygon3d poly : polygons) {
-			this.polygons.add(poly);
-		}
+		Collections.addAll(this.polygons, polygons);
 	}
 	
 	public Tetrahedron() {
@@ -58,6 +57,13 @@ public class Tetrahedron implements Groupable {
 		}
 	}
 	
+	public void render(Graphics g, PointLight light) {
+		sortPolygons();
+		for(Polygon3d poly : polygons) {
+			poly.render(g, light);
+		}
+	}
+	
 	public void renderLighting(Graphics g, ArrayList<PointLight> lightingSources) {
 		renderLighting(g, 0, lightingSources);
 	}
@@ -68,22 +74,27 @@ public class Tetrahedron implements Groupable {
 		
 		Tetrahedron lightingTetra = this.subdivide(numSubdivisions);
 		for(Polygon3d poly : lightingTetra.polygons) {
-			double shading = lightingSources.get(0).getIntensity(poly.getAverage());
+			double closeIntensity = lightingSources.get(0).getIntensity(poly.getClosestPoint(lightingSources.get(0).origin()).coords());
+			double farIntensity = lightingSources.get(0).getIntensity(poly.getFurthestPoint(lightingSources.get(0).origin()).coords());
 			
 			for(PointLight light : lightingSources) {
-				if(shading > light.getIntensity(poly.getAverage())) {
-					shading = light.getIntensity(poly.getAverage());
+				if(closeIntensity > light.getIntensity(poly.getAverage())) {
+					closeIntensity = light.getIntensity(poly.getAverage());
 				}
 			}
 			
 			Color oldPolyColor = poly.getColor();
-			int newRed  = Math.max(0, Math.min(255, (int)(oldPolyColor.getRed() - oldPolyColor.getRed()*shading)));
-			int newGreen= Math.max(0, Math.min(255, (int)(oldPolyColor.getGreen() - oldPolyColor.getGreen()*shading)));
-			int newBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*shading)));
-			poly.setColor(new Color(newRed, newGreen, newBlue, oldPolyColor.getAlpha()));
+			int closeRed  = Math.max(0, Math.min(255, (int)(oldPolyColor.getRed() - oldPolyColor.getRed()*closeIntensity)));
+			int closeGreen= Math.max(0, Math.min(255, (int)(oldPolyColor.getGreen() - oldPolyColor.getGreen()*closeIntensity)));
+			int closeBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*closeIntensity)));
+			int farRed  = Math.max(0, Math.min(255, (int)(oldPolyColor.getRed() - oldPolyColor.getRed()*farIntensity)));;
+			int farGreen= Math.max(0, Math.min(255, (int)(oldPolyColor.getGreen() - oldPolyColor.getGreen()*farIntensity)));;
+			int farBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*farIntensity)));;
+			poly.setColor(new Color(closeRed, closeGreen, closeBlue, oldPolyColor.getAlpha()));
+			poly.setShadedColor(new Color(farRed, farGreen, farBlue, oldPolyColor.getAlpha()));
 		}
 		
-		lightingTetra.render(g);
+		lightingTetra.render(g, lightingSources.get(0));
 	}
 	
 	public void liteRender(Graphics g, int num) {
@@ -147,6 +158,9 @@ public class Tetrahedron implements Groupable {
 	}
 
 	public double getXCoordinate() {
+		if(polygons.isEmpty())
+			return 0;
+		
 		int xSum = 0;
 		for(Polygon3d poly : polygons) {
 			xSum+=poly.getXAverage();
@@ -157,6 +171,9 @@ public class Tetrahedron implements Groupable {
 	}
 
 	public double getYCoordinate() {
+		if(polygons.isEmpty())
+			return 0;
+		
 		int ySum = 0;
 		for(Polygon3d poly : polygons) {
 			ySum+=poly.getYAverage();
@@ -167,6 +184,9 @@ public class Tetrahedron implements Groupable {
 	}
 
 	public double getZCoordinate() {
+		if(polygons.isEmpty())
+			return 0;
+		
 		int zSum = 0;
 		for(Polygon3d poly : polygons) {
 			zSum+=poly.getZAverage();
@@ -230,6 +250,10 @@ public class Tetrahedron implements Groupable {
 		}
 		
 		return output;
+	}
+	
+	public void add(Polygon3d poly) {
+		polygons.add(poly);
 	}
 	
 	public Tetrahedron merge(Tetrahedron other) {

@@ -32,12 +32,13 @@ public class ImageConverter {
 	 * @param xRotation The rotation of the playerSkin along the x-axis.
 	 * @param yRotation The rotation of the playerSkin along the y-axis.
 	 * @param zRotation The rotation of the playerSkin along the z-axis.
+	 * @param subdivisions How many times to subdivide the colors on the player's skin.
 	 * @param width The width the exported BufferedImage should be.
 	 * @param height The height the exported BufferedImage should be.
 	 * @param background The background image for the playerSkin to be rendered over.
 	 * @return A BufferedImage of the rendered playerSkin.
 	 */
-	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int subdivisions, int width, int height, BufferedImage background) {
 		//Assign width and height to the PointConverter class
 		PointConverter.WIDTH = width;
 		PointConverter.HEIGHT = height;
@@ -65,7 +66,7 @@ public class ImageConverter {
 		playerModel.rotate(true, xRotation, 0, 0, LightingControl.lightVector);
 		
 		//draw on graphics object
-		playerModel.renderLighting(bImage.getGraphics(), 1, lights);
+		playerModel.renderLighting(bImage.getGraphics(), subdivisions, lights);
 		
 		//delete all the shit used to render this
 		playerModel.delete();
@@ -76,6 +77,10 @@ public class ImageConverter {
 		//return image
 		return bImage;
 		
+	}
+
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
+		return renderSkin(playerSkin, skinPose, headPitch, headYaw, lights, xRotation, yRotation, zRotation, 0, width, height, background);
 	}
 	
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
@@ -131,12 +136,25 @@ public class ImageConverter {
 		double startX = -image.getWidth()*scale/2;
 		double startY = image.getHeight()*scale/2;
 		
+		/*
+		Point3d[][] pointGrid = new Point3d[image.getHeight()+1][image.getWidth()+1];
+		for(int y = 0; y < pointGrid.length; y++) {
+			for(int x = 0; x < pointGrid[y].length; x++) {
+				pointGrid[y][x] = new Point3d(startX+(x*scale), startY+(y*scale), 0);
+			}
+		} //*/
+		
+		Color color;
 		//y must decrease to reach endY, but
 		//x must increase to reach endX
 		for(int y = 0; y < image.getHeight(); y++) {
 			for(int x = 0; x < image.getWidth(); x++) {
 				//gets the color of the current pixel
-				Color color = new Color(image.getRGB(x, y), hasAlpha);
+				color = new Color(image.getRGB(x, y), hasAlpha);
+				
+				/*
+				if(color.getAlpha() == 0)
+					continue; //*/
 				
 				//adds the pixel as a new polygon.
 				//IMPORTANT: adds invis pixels, to balance out the average position
@@ -151,7 +169,7 @@ public class ImageConverter {
 			}
 		}
 		
-		return new Tetrahedron(polygons);		
+		return new Tetrahedron(polygons);
 	}
 	
 	

@@ -22,4 +22,8 @@ public class PointLight {
 		return Math.min(1, Math.max(LightingControl.AMBIENT_LIGHTING_INDEX, intensity));
 	}
 	
+	public Point3d origin() {
+		return source;
+	}
+	
 }

@@ -110,9 +110,9 @@ public class Shapes {
 		if(figure.size() != 6)
 			return;
 
-		final int HEAD = 0;
+		final int HEAD  = 0;
 		final int TORSO = 1;
-		final int L_ARM= 2;
+		final int L_ARM = 2;
 		final int R_ARM = 3;
 		final int L_LEG = 4;
 		final int R_LEG = 5;

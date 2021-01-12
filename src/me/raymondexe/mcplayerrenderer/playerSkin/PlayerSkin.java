@@ -30,8 +30,6 @@ public class PlayerSkin {
 	 */
 	public PlayerSkin(String uuid) {
 		this.skinFile = PlayerSkinGrabber.getSkin(uuid);
-		
-		// TODO find a way to auto-detect if the user's skin is alex or steve? 
 		// Look into using Mojang API for that
 		/*
 		if(string .contains("\"model\": \"slim\""))
@@ -39,6 +37,7 @@ public class PlayerSkin {
 		else */
 			skinType = SkinConfig.STEVE;
 	}
+	
 	
 	/** 
 	 * Creates a playerSkin object for the specified player
@@ -53,6 +52,7 @@ public class PlayerSkin {
 			System.out.println("Player " + uuid + " not found!");
 	}
 	
+	
 	/** 
 	 * Creates a playerSkin object for the specified player
 	 * @param skinFile an image of the pre-existing skin
@@ -60,6 +60,7 @@ public class PlayerSkin {
 	public PlayerSkin(BufferedImage skinFile) {
 		this(skinFile, SkinConfig.STEVE);
 	}
+	
 	
 	/** 
 	 * Creates a playerSkin object for the specified player
@@ -70,6 +71,7 @@ public class PlayerSkin {
 		this.skinFile = skinFile;
 		this.skinType = type;
 	}
+	
 	
 	/** 
 	 * Gets a BufferedImage of the specified part of the players skin.
@@ -97,6 +99,7 @@ public class PlayerSkin {
 			return null;
 		}
 	}
+	
 	
 	/** 
 	 * Gets an image of the player's head.

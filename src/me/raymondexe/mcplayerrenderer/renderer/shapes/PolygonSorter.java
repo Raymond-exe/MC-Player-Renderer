@@ -27,10 +27,11 @@ public class PolygonSorter implements Comparator<Polygon3d> {
 		return 0;
 	}
 	
+	/*
 	private boolean isBetween(double comparison, double lowerLimit, double upperLimit, boolean inclusive) {
 		if(inclusive)
 			return (comparison >= lowerLimit && comparison <= upperLimit);
 		return (comparison > lowerLimit && comparison < upperLimit);
-	}
+	} //*/
 
 }
