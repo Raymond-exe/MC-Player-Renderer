@@ -268,7 +268,6 @@ public class Polygon3d {
 		//if it's not a square, shit
 		ArrayList<Polygon3d> newPolygons = new ArrayList<>();
 		ArrayList<Point3d> newPolyPoints = new ArrayList<>();
-		double[] coords;
 		//go through each point and...
 		for(Point3d ptA : points) {
 			newPolyPoints = new ArrayList<>();

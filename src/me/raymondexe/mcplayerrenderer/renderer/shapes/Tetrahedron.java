@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
-import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Tetrahedron implements Groupable {
 	
@@ -69,10 +68,15 @@ public class Tetrahedron implements Groupable {
 	}
 	
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources) {
+		renderLighting(g, numSubdivisions, lightingSources, false);
+	}
+	
+	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, boolean gradientShading) {
 		
 		//TODO subdivide so that this thing is more even
 		
 		Tetrahedron lightingTetra = this.subdivide(numSubdivisions);
+		Color oldPolyColor;
 		for(Polygon3d poly : lightingTetra.polygons) {
 			double closeIntensity = lightingSources.get(0).getIntensity(poly.getClosestPoint(lightingSources.get(0).origin()).coords());
 			double farIntensity = lightingSources.get(0).getIntensity(poly.getFurthestPoint(lightingSources.get(0).origin()).coords());
@@ -83,15 +87,18 @@ public class Tetrahedron implements Groupable {
 				}
 			}
 			
-			Color oldPolyColor = poly.getColor();
+			oldPolyColor = poly.getColor();
 			int closeRed  = Math.max(0, Math.min(255, (int)(oldPolyColor.getRed() - oldPolyColor.getRed()*closeIntensity)));
 			int closeGreen= Math.max(0, Math.min(255, (int)(oldPolyColor.getGreen() - oldPolyColor.getGreen()*closeIntensity)));
 			int closeBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*closeIntensity)));
-			int farRed  = Math.max(0, Math.min(255, (int)(oldPolyColor.getRed() - oldPolyColor.getRed()*farIntensity)));;
-			int farGreen= Math.max(0, Math.min(255, (int)(oldPolyColor.getGreen() - oldPolyColor.getGreen()*farIntensity)));;
-			int farBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*farIntensity)));;
 			poly.setColor(new Color(closeRed, closeGreen, closeBlue, oldPolyColor.getAlpha()));
-			poly.setShadedColor(new Color(farRed, farGreen, farBlue, oldPolyColor.getAlpha()));
+			
+			if(gradientShading) {
+				int farRed  = Math.max(0, Math.min(255, (int)(oldPolyColor.getRed() - oldPolyColor.getRed()*farIntensity)));;
+				int farGreen= Math.max(0, Math.min(255, (int)(oldPolyColor.getGreen() - oldPolyColor.getGreen()*farIntensity)));;
+				int farBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*farIntensity)));;
+				poly.setShadedColor(new Color(farRed, farGreen, farBlue, oldPolyColor.getAlpha()));
+			}
 		}
 		
 		lightingTetra.render(g, lightingSources.get(0));
