@@ -199,8 +199,14 @@ hs_err_pid*
 # End of https://www.toptal.com/developers/gitignore/api/intellij,eclipse,java
 
 # User-added tags
+
 skin.png
 MCPlayerRenderer.iml
+
+.classpath
+.project
+
+bin/*
 .idea/*
 imagePlates/*
 renders/*
