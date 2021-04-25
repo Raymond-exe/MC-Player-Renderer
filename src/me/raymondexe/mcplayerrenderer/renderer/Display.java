@@ -30,7 +30,7 @@ public class Display extends Canvas implements Runnable {
 	
 	private static final int FRAMES_PER_SECOND = 60;
 
-	private static final int SUBDIVISIONS = 1;
+	private static final int SUBDIVISIONS = 0;
 	
 	private Thread thread;
 	private JFrame jFrame;
@@ -128,11 +128,11 @@ public class Display extends Canvas implements Runnable {
 		
 		if(lights==null || lights.isEmpty()) {
 			lights = new ArrayList<>();
-			lights.add(new PointLight(new Point3d(0, 150, 125), 5000, 3));	
+			lights.add(new PointLight(Point3d.createPoint(0, 150, 125), 5000, 3));
 		}
 		
 		//figure.render(g);
-		figure.renderLighting(g, lights);
+		figure.renderLighting(g, 1, lights, 0.005);
 		
 		g.dispose();
 		bs.show();

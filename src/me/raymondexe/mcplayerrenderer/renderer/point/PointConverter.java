@@ -18,10 +18,10 @@ public class PointConverter {
 	public static int WIDTH;
 	public static int HEIGHT;
 	
-	public static Point convertPoint(Point3d point3d) {
-		double x3d = point3d.x;
-		double y3d = point3d.z;
-		double depth = point3d.y * SCALE;
+	public static Point convertPoint(double[] pt3d) {
+		double x3d = pt3d[Point3d.X];
+		double y3d = pt3d[Point3d.Z];
+		double depth = pt3d[Point3d.Y] * SCALE;
 		double[] newVal = scale(x3d, y3d, depth);
 		int x2d = (int)(WIDTH / 2 + newVal[1]);
 		int y2d = (int)(HEIGHT / 2 - newVal[0]);
@@ -42,32 +42,32 @@ public class PointConverter {
 	}
 	
 	//TODO do method lol
-	public static void rotateXAxis(Point3d p, boolean CW, double degrees) {
-		double radius = Math.sqrt(p.y*p.y + p.z*p.z);
-		double theta = Math.atan2(p.y, p.z);
+	public static void rotateXAxis(double[] p, boolean CW, double degrees) {
+		double radius = Math.sqrt(p[Point3d.Y]*p[Point3d.Y] + p[Point3d.Z]*p[Point3d.Z]);
+		double theta = Math.atan2(p[Point3d.Y], p[Point3d.Z]);
 		theta += 2*Math.PI/360*degrees*(CW?-1:1);
 		
-		p.y = radius*Math.sin(theta);
-		p.z = radius*Math.cos(theta);
+		p[Point3d.Y] = radius*Math.sin(theta);
+		p[Point3d.Z] = radius*Math.cos(theta);
 	}
 	
-	public static void rotateYAxis(Point3d p, boolean CW, double degrees) {
-		double radius = Math.sqrt(p.x*p.x + p.z*p.z);
-		double theta = Math.atan2(p.x, p.z);
+	public static void rotateYAxis(double[] p, boolean CW, double degrees) {
+		double radius = Math.sqrt(p[Point3d.X]*p[Point3d.X] + p[Point3d.Z]*p[Point3d.Z]);
+		double theta = Math.atan2(p[Point3d.X], p[Point3d.Z]);
 		theta += 2*Math.PI/360*degrees*(CW?1:-1);
 		
-		p.z = radius*Math.cos(theta);
-		p.x = radius*Math.sin(theta);
+		p[Point3d.Z] = radius*Math.cos(theta);
+		p[Point3d.X] = radius*Math.sin(theta);
 	}
 	
 	//TODO do method lol
-	public static void rotateZAxis(Point3d p, boolean CW, double degrees) {
-		double radius = Math.sqrt(p.x*p.x + p.y*p.y);
-		double theta = Math.atan2(p.x, p.y);
+	public static void rotateZAxis(double[] p, boolean CW, double degrees) {
+		double radius = Math.sqrt(p[Point3d.X]*p[Point3d.X] + p[Point3d.Y]*p[Point3d.Y]);
+		double theta = Math.atan2(p[Point3d.X], p[Point3d.Y]);
 		theta += 2*Math.PI/360*degrees*(CW?-1:1);
 		
-		p.x = radius*Math.sin(theta);
-		p.y = radius*Math.cos(theta);
+		p[Point3d.X] = radius*Math.sin(theta);
+		p[Point3d.Y] = radius*Math.cos(theta);
 	}
 	
 	public static void increaseFovScale(int num) {

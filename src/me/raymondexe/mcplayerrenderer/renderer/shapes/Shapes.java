@@ -21,14 +21,14 @@ public class Shapes {
 	 * @return A 3D multi-colored cube
 	 */
 	public static Tetrahedron getCube(double scale) {
-		Point3d pointA = new Point3d(scale, -scale, -scale);
-		Point3d pointB = new Point3d(scale, scale, -scale);
-		Point3d pointC = new Point3d(scale, scale, scale);
-		Point3d pointD = new Point3d(scale, -scale, scale);
-		Point3d pointE = new Point3d(-scale, -scale, -scale);
-		Point3d pointF = new Point3d(-scale, scale, -scale);
-		Point3d pointG = new Point3d(-scale, scale, scale);
-		Point3d pointH = new Point3d(-scale, -scale, scale);
+		double[] pointA = Point3d.createPoint(scale, -scale, -scale);
+		double[] pointB = Point3d.createPoint(scale, scale, -scale);
+		double[] pointC = Point3d.createPoint(scale, scale, scale);
+		double[] pointD = Point3d.createPoint(scale, -scale, scale);
+		double[] pointE = Point3d.createPoint(-scale, -scale, -scale);
+		double[] pointF = Point3d.createPoint(-scale, scale, -scale);
+		double[] pointG = Point3d.createPoint(-scale, scale, scale);
+		double[] pointH = Point3d.createPoint(-scale, -scale, scale);
 		
 		Tetrahedron cube = new Tetrahedron(
 				new Polygon3d(Color.cyan, pointA, pointB, pointC, pointD),
@@ -49,14 +49,14 @@ public class Shapes {
 	 * @return A rectangular prism with the given scales
 	 */
 	public static Tetrahedron getRectangularPrism(double xScale, double yScale, double zScale) {
-		Point3d pointA = new Point3d(xScale, -yScale, -zScale);
-		Point3d pointB = new Point3d(xScale, yScale, -zScale);
-		Point3d pointC = new Point3d(xScale, yScale, zScale);
-		Point3d pointD = new Point3d(xScale, -yScale, zScale);
-		Point3d pointE = new Point3d(-xScale, -yScale, -zScale);
-		Point3d pointF = new Point3d(-xScale, yScale, -zScale);
-		Point3d pointG = new Point3d(-xScale, yScale, zScale);
-		Point3d pointH = new Point3d(-xScale, -yScale, zScale);
+		double[] pointA = Point3d.createPoint(xScale, -yScale, -zScale);
+		double[] pointB = Point3d.createPoint(xScale, yScale, -zScale);
+		double[] pointC = Point3d.createPoint(xScale, yScale, zScale);
+		double[] pointD = Point3d.createPoint(xScale, -yScale, zScale);
+		double[] pointE = Point3d.createPoint(-xScale, -yScale, -zScale);
+		double[] pointF = Point3d.createPoint(-xScale, yScale, -zScale);
+		double[] pointG = Point3d.createPoint(-xScale, yScale, zScale);
+		double[] pointH = Point3d.createPoint(-xScale, -yScale, zScale);
 		
 		Tetrahedron prism = new Tetrahedron(
 				new Polygon3d(Color.cyan, pointA, pointB, pointC, pointD),		//FRONT	
@@ -102,7 +102,7 @@ public class Shapes {
 	
 	/**
 	 * Fixes the rotation values for each of the prisms of the figure 
-	 * from the getFigugre() method above.
+	 * from the getFigure() method above.
 	 * @param figure The figure to fix.
 	 * @see getFigure()
 	 */

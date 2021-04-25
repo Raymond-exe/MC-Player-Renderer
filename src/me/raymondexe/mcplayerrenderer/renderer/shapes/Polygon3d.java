@@ -26,9 +26,9 @@ public class Polygon3d {
 
 	private Color baseColor;
 	private Color shadedColor;
-	private List<Point3d> points;
+	private List<double[]> points;
 	
-	public Polygon3d(Color color, Point3d... pts) {
+	public Polygon3d(Color color, double[]... pts) {
 		this.baseColor = color;
 		points = new ArrayList<>();
 		
@@ -36,7 +36,7 @@ public class Polygon3d {
 			points.add(pts[i]);
 	}
 	
-	public Polygon3d(Color color, List<Point3d> pts) {
+	public Polygon3d(Color color, List<double[]> pts) {
 		this.baseColor = color;
 		points = pts;
 	}
@@ -72,8 +72,8 @@ public class Polygon3d {
 	public double getYAverage() {
 		double sum = 0;
 		
-		for(Point3d p : points) {
-			sum+= p.y;
+		for(double[] p : points) {
+			sum+= p[Point3d.Y];
 		}
 		return sum/points.size();
 	}
@@ -81,8 +81,8 @@ public class Polygon3d {
 	public double getXAverage() {
 		double sum = 0;
 		
-		for(Point3d p : points) {
-			sum+= p.x;
+		for(double[] p : points) {
+			sum+= p[Point3d.X];
 		}
 		return sum/points.size();
 	}
@@ -90,8 +90,8 @@ public class Polygon3d {
 	public double getZAverage() {
 		double sum = 0;
 		
-		for(Point3d p : points) {
-			sum+= p.z;
+		for(double[] p : points) {
+			sum+= p[Point3d.Z];
 		}
 		return sum/points.size();
 	}
@@ -101,7 +101,7 @@ public class Polygon3d {
 	}
 	
 	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector) {
-		for (Point3d p : points) {
+		for (double[] p : points) {
 			PointConverter.rotateXAxis(p, CW, xRotation);
 			PointConverter.rotateYAxis(p, CW, yRotation);
 			PointConverter.rotateZAxis(p, CW, zRotation);
@@ -112,90 +112,90 @@ public class Polygon3d {
 	}
 	
 	public double getYMax() {
-		Point3d pointMax = points.get(0);
+		double yMax = points.get(0)[Point3d.Y];
 		
-		for(Point3d p : points) {
-			if(p.y > pointMax.y)
-				pointMax = p;
+		for(double[] p : points) {
+			if(p[Point3d.Y] > yMax)
+				yMax = p[Point3d.Y];
 		}
 		
-		return pointMax.y;
+		return yMax;
 	}
 	
 	public double getYMin() {
-		Point3d pointMin = points.get(0);
-		
-		for(Point3d p : points) {
-			if(p.y < pointMin.y)
-				pointMin = p;
+		double yMax = points.get(0)[Point3d.Y];
+
+		for(double[] p : points) {
+			if(p[Point3d.Y] < yMax)
+				yMax = p[Point3d.Y];
 		}
-		
-		return pointMin.y;		
+
+		return yMax;
 	}
 	
 	public double getXMax() {
-		Point3d pointMax = points.get(0);
-		
-		for(Point3d p : points) {
-			if(p.x > pointMax.x)
-				pointMax = p;
+		double xMax = points.get(0)[Point3d.X];
+
+		for(double[] p : points) {
+			if(p[Point3d.X] > xMax)
+				xMax = p[Point3d.X];
 		}
-		
-		return pointMax.x;
+
+		return xMax;
 	}
 	
 	public double getXMin() {
-		Point3d pointMin = points.get(0);
-		
-		for(Point3d p : points) {
-			if(p.x < pointMin.x)
-				pointMin = p;
+		double xMax = points.get(0)[Point3d.X];
+
+		for(double[] p : points) {
+			if(p[Point3d.X] < xMax)
+				xMax = p[Point3d.X];
 		}
-		
-		return pointMin.x;		
+
+		return xMax;
 	}
 	
 	public double getZMax() {
-		Point3d pointMax = points.get(0);
-		
-		for(Point3d p : points) {
-			if(p.z > pointMax.z)
-				pointMax = p;
+		double zMax = points.get(0)[Point3d.Z];
+
+		for(double[] p : points) {
+			if(p[Point3d.Z] > zMax)
+				zMax = p[Point3d.Z];
 		}
-		
-		return pointMax.z;
+
+		return zMax;
 	}
 	
 	public double getZMin() {
-		Point3d pointMin = points.get(0);
-		
-		for(Point3d p : points) {
-			if(p.z < pointMin.z)
-				pointMin = p;
+		double zMax = points.get(0)[Point3d.Z];
+
+		for(double[] p : points) {
+			if(p[Point3d.Z] < zMax)
+				zMax = p[Point3d.Z];
 		}
-		
-		return pointMin.z;
+
+		return zMax;
 	}
 	
-	public Point3d getClosestPoint(Point3d other) {
-		Point3d closest = points.get(0);
-		double distance = closest.getDistanceFrom(other);
-		for(Point3d pt : points) {
-			if(pt.getDistanceFrom(other) < distance) {
+	public double[] getClosestPoint(double[] other) {
+		double[] closest = points.get(0);
+		double distance = Point3d.getDistanceBetween(closest, other);
+		for(double[] pt : points) {
+			if(Point3d.getDistanceBetween(pt, other) < distance) {
 				closest = pt;
-				distance = pt.getDistanceFrom(other);
+				distance = Point3d.getDistanceBetween(pt, other);
 			}
 		}
 		return closest;
 	}
 	
-	public Point3d getFurthestPoint(Point3d other) {
-		Point3d furthest = points.get(0);
-		double distance = furthest.getDistanceFrom(other);
-		for(Point3d pt : points) {
-			if(pt.getDistanceFrom(other) > distance) {
+	public double[] getFurthestPoint(double[] other) {
+		double[] furthest = points.get(0);
+		double distance = Point3d.getDistanceBetween(furthest, other);
+		for(double[] pt : points) {
+			if(Point3d.getDistanceBetween(pt, other) > distance) {
 				furthest = pt;
-				distance = pt.getDistanceFrom(other);
+				distance = Point3d.getDistanceBetween(pt, other);
 			}
 		}
 		return furthest;
@@ -219,10 +219,10 @@ public class Polygon3d {
 
 	public void move(double deltaX, double deltaY, double deltaZ) {
 		
-		for(Point3d pt : points) {
-			pt.x+=deltaX;
-			pt.y+=deltaY;
-			pt.z+=deltaZ;
+		for(double[] pt : points) {
+			pt[Point3d.X]+=deltaX;
+			pt[Point3d.Y]+=deltaY;
+			pt[Point3d.Z]+=deltaZ;
 		}
 		
 	}
@@ -267,12 +267,12 @@ public class Polygon3d {
 		
 		//if it's not a square, shit
 		ArrayList<Polygon3d> newPolygons = new ArrayList<>();
-		ArrayList<Point3d> newPolyPoints = new ArrayList<>();
+		ArrayList<double[]> newPolyPoints = new ArrayList<>();
 		//go through each point and...
-		for(Point3d ptA : points) {
+		for(double[] ptA : points) {
 			newPolyPoints = new ArrayList<>();
 			//create a new point between itself and all the other points
-			for(Point3d ptB : points) {
+			for(double[] ptB : points) {
 				newPolyPoints.add(Point3d.average(ptA, ptB));
 			}
 			newPolygons.add(new Polygon3d(baseColor, newPolyPoints));

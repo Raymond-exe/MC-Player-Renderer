@@ -25,6 +25,8 @@ import me.raymondexe.mcplayerrenderer.renderer.shapes.Tetrahedron;
 
 public class ImageConverter {
 
+	public static boolean ATTEMPT_GARBAGE_COLLECTION = false; // Users can set to true if they want to trigger the garbage collection
+
 	/**
 	 * Outputs a render of the given PlayerSkin as a BufferedImage.
 	 * @param playerSkin The PlayerSkin object to render.
@@ -38,7 +40,7 @@ public class ImageConverter {
 	 * @param background The background image for the playerSkin to be rendered over.
 	 * @return A BufferedImage of the rendered playerSkin.
 	 */
-	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int subdivisions, int width, int height, BufferedImage background) {
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int subdivisions, int width, int height, BufferedImage background, double delay) {
 		//Assign width and height to the PointConverter class
 		PointConverter.WIDTH = width;
 		PointConverter.HEIGHT = height;
@@ -66,17 +68,22 @@ public class ImageConverter {
 		playerModel.rotate(true, xRotation, 0, 0, LightingControl.lightVector);
 		
 		//draw on graphics object
-		playerModel.renderLighting(bImage.getGraphics(), subdivisions, lights);
+		playerModel.renderLighting(bImage.getGraphics(), subdivisions, lights, delay);
+
+		if(ATTEMPT_GARBAGE_COLLECTION) {
+			//delete all the shit used to render this
+			playerModel.delete();
+
+			//TRY to make the garbage collector clean it up
+			System.gc();
+		}
+
+		return bImage; //return image
 		
-		//delete all the shit used to render this
-		playerModel.delete();
-		
-		//TRY to make the garbage collector clean it up
-		System.gc();
-		
-		//return image
-		return bImage;
-		
+	}
+
+	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int subdivisions, int width, int height, BufferedImage background) {
+		return renderSkin(playerSkin, skinPose, headPitch, headYaw, lights, xRotation, yRotation, zRotation, subdivisions, width, height, background, 0);
 	}
 
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
@@ -88,7 +95,7 @@ public class ImageConverter {
 	}
 	
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
-		PointLight light = new PointLight(new Point3d(0,0,125), 10000, 5);
+		PointLight light = new PointLight(Point3d.createPoint(0,0,125), 10000, 5);
 		ArrayList<PointLight> lights = new ArrayList<>();
 		lights.add(light);
 		return renderSkin(playerSkin, skinPose, lights, xRotation, yRotation, zRotation, width, height, background);
@@ -160,10 +167,10 @@ public class ImageConverter {
 				//IMPORTANT: adds invis pixels, to balance out the average position
 				polygons.add(
 						new Polygon3d(color,
-								new Point3d(startX+(x*scale), startY+(y*scale), 0),
-								new Point3d(startX+((x+1)*scale), startY+(y*scale), 0),
-								new Point3d(startX+((x+1)*scale), startY+((y+1)*scale), 0),
-								new Point3d(startX+(x*scale), startY+((y+1)*scale), 0)
+								Point3d.createPoint(startX+(x*scale), startY+(y*scale), 0),
+								Point3d.createPoint(startX+((x+1)*scale), startY+(y*scale), 0),
+								Point3d.createPoint(startX+((x+1)*scale), startY+((y+1)*scale), 0),
+								Point3d.createPoint(startX+(x*scale), startY+((y+1)*scale), 0)
 						)
 				);
 			}
