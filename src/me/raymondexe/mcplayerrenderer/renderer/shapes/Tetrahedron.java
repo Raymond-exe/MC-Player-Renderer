@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
+import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Tetrahedron implements Groupable {
 	
@@ -78,8 +79,8 @@ public class Tetrahedron implements Groupable {
 		Tetrahedron lightingTetra = this.subdivide(numSubdivisions);
 		Color oldPolyColor;
 		for(Polygon3d poly : lightingTetra.polygons) {
-			double closeIntensity = lightingSources.get(0).getIntensity(poly.getClosestPoint(lightingSources.get(0).origin()).coords());
-			double farIntensity = lightingSources.get(0).getIntensity(poly.getFurthestPoint(lightingSources.get(0).origin()).coords());
+			double closeIntensity = lightingSources.get(0).getIntensity(poly.getClosestPoint(lightingSources.get(0).origin()));
+			double farIntensity = lightingSources.get(0).getIntensity(poly.getFurthestPoint(lightingSources.get(0).origin()));
 			
 			for(PointLight light : lightingSources) {
 				if(closeIntensity > light.getIntensity(poly.getAverage())) {
@@ -218,7 +219,7 @@ public class Tetrahedron implements Groupable {
 		ySum/=polygons.size();
 		zSum/=polygons.size();
 		
-		return new double[]{xSum, ySum, zSum};
+		return Point3d.createPoint(xSum, ySum, zSum);
 	}
 	
 	private void sortPolygons() {

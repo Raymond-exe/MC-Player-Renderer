@@ -88,7 +88,7 @@ public class ImageConverter {
 	}
 	
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, double xRotation, double yRotation, double zRotation, int width, int height, BufferedImage background) {
-		PointLight light = new PointLight(new Point3d(0,0,125), 10000, 5);
+		PointLight light = new PointLight(Point3d.createPoint(0,0,125), 10000, 5);
 		ArrayList<PointLight> lights = new ArrayList<>();
 		lights.add(light);
 		return renderSkin(playerSkin, skinPose, lights, xRotation, yRotation, zRotation, width, height, background);
@@ -160,10 +160,10 @@ public class ImageConverter {
 				//IMPORTANT: adds invis pixels, to balance out the average position
 				polygons.add(
 						new Polygon3d(color,
-								new Point3d(startX+(x*scale), startY+(y*scale), 0),
-								new Point3d(startX+((x+1)*scale), startY+(y*scale), 0),
-								new Point3d(startX+((x+1)*scale), startY+((y+1)*scale), 0),
-								new Point3d(startX+(x*scale), startY+((y+1)*scale), 0)
+								Point3d.createPoint(startX+(x*scale), startY+(y*scale), 0),
+								Point3d.createPoint(startX+((x+1)*scale), startY+(y*scale), 0),
+								Point3d.createPoint(startX+((x+1)*scale), startY+((y+1)*scale), 0),
+								Point3d.createPoint(startX+(x*scale), startY+((y+1)*scale), 0)
 						)
 				);
 			}

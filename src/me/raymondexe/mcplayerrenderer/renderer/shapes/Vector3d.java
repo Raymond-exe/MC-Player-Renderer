@@ -4,41 +4,41 @@ import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 
 public class Vector3d {
 	
-	private Point3d start;
-	private Point3d end;
+	private double[] start;
+	private double[] end;
 	
-	public Vector3d(Point3d s, Point3d e) {
+	public Vector3d(double[] s, double[] e) {
 		start = s;
 		end = e;
 	}
 	
 	public Vector3d(double x, double y, double z) {
-		start = new Point3d(0, 0, 0);
-		end = new Point3d(x, y, z);
+		start = Point3d.createPoint(0, 0, 0);
+		end = Point3d.createPoint(x, y, z);
 	}
 	
-	public Point3d getStart() {
+	public double[] getStart() {
 		return start;
 	}
 	
-	public Point3d getEnd() {
+	public double[] getEnd() {
 		return end;
 	}
 	
 	public double getX() {
-		return start.x-end.x;
+		return start[Point3d.X]-end[Point3d.X];
 	}
 	
 	public double getY() {
-		return start.y-end.y;
+		return start[Point3d.Y]-end[Point3d.Y];
 	}
 	
 	public double getZ() {
-		return start.y-end.y;
+		return start[Point3d.Y]-end[Point3d.Y]; //why is it y?
 	}
 	
 	public Vector3d getVectorFromOrigin() {
-		return new Vector3d(new Point3d(0,0,0), new Point3d(getX(), getY(), getZ()));
+		return new Vector3d(Point3d.createPoint(0,0,0), Point3d.createPoint(getX(), getY(), getZ()));
 	}
 	
 	public double getMagnitude() {

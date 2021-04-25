@@ -128,7 +128,7 @@ public class Display extends Canvas implements Runnable {
 		
 		if(lights==null || lights.isEmpty()) {
 			lights = new ArrayList<>();
-			lights.add(new PointLight(new Point3d(0, 150, 125), 5000, 3));	
+			lights.add(new PointLight(Point3d.createPoint(0, 150, 125), 5000, 3));
 		}
 		
 		//figure.render(g);
