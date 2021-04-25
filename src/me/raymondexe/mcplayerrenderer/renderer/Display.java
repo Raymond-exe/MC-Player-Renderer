@@ -30,7 +30,7 @@ public class Display extends Canvas implements Runnable {
 	
 	private static final int FRAMES_PER_SECOND = 60;
 
-	private static final int SUBDIVISIONS = 1;
+	private static final int SUBDIVISIONS = 0;
 	
 	private Thread thread;
 	private JFrame jFrame;
@@ -132,7 +132,7 @@ public class Display extends Canvas implements Runnable {
 		}
 		
 		//figure.render(g);
-		figure.renderLighting(g, lights);
+		figure.renderLighting(g, 1, lights, 0.005);
 		
 		g.dispose();
 		bs.show();
