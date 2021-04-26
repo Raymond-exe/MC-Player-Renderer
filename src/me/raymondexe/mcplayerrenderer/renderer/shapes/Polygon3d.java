@@ -15,9 +15,11 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
+import me.raymondexe.mcplayerrenderer.renderer.point.Line;
 import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 
@@ -31,9 +33,8 @@ public class Polygon3d {
 	public Polygon3d(Color color, double[]... pts) {
 		this.baseColor = color;
 		points = new ArrayList<>();
-		
-		for(int i = 0; i < pts.length; i++)
-			points.add(pts[i]);
+
+		points.addAll(Arrays.asList(pts));
 	}
 	
 	public Polygon3d(Color color, List<double[]> pts) {
@@ -62,9 +63,13 @@ public class Polygon3d {
 			g.fillPolygon(poly);
 		} else {
 			Graphics2D g2d = (Graphics2D)g;
-			Point close = PointConverter.convertPoint(getClosestPoint(light.origin()));
-			Point far = PointConverter.convertPoint(getFurthestPoint(light.origin()));
-			g2d.setPaint(new GradientPaint((int)far.getX(), (int)far.getY(), shadedColor, (int)close.getX(), (int)close.getY(), baseColor));
+			Point center = PointConverter.convertPoint(getAverage());
+			Point[] closestPoints = getClosestTwoFlatPoints(PointConverter.convertPoint(light.origin()));
+			Point[] furthestPoints = getFurthestTwoFlatPoints(PointConverter.convertPoint(light.origin()));
+			Line lineFromLight = new Line(PointConverter.convertPoint(light.origin()), center);
+			Point gradientStart = new Line(closestPoints[0], closestPoints[1]).getInterception(lineFromLight);
+			Point gradientEnd = new Line(furthestPoints[0], furthestPoints[1]).getInterception(lineFromLight);
+			g2d.setPaint(new GradientPaint((int)gradientEnd.getX(), (int)gradientEnd.getY(), shadedColor, (int)gradientStart.getX(), (int)gradientStart.getY(), baseColor));
 			g2d.fillPolygon(poly);
 		}
 	}
@@ -188,7 +193,49 @@ public class Polygon3d {
 		}
 		return closest;
 	}
-	
+
+	public double[][] getClosestTwoPoints(double[] other) {
+		double[] closest1 = points.get(0); // the furthest point
+		double[] closest2 = points.get(0); // the 2nd furthest point
+		double distance1 = Point3d.getDistanceBetween(closest1, other);
+		double distance2 = Point3d.getDistanceBetween(closest2, other);
+		double ptDistance;
+		for(double[] pt : points) {
+			ptDistance = Point3d.getDistanceBetween(pt, other);
+			if(ptDistance < distance2) {
+				if(ptDistance < distance1) {
+					closest1 = pt;
+					distance1 = ptDistance;
+				} else {
+					closest2 = pt;
+					distance2 = ptDistance;
+				}
+			}
+		}
+		return new double[][]{closest1, closest2};
+	}
+
+	public Point[] getClosestTwoFlatPoints(Point other) {
+		Point closest1 = PointConverter.convertPoint(points.get(0)); // the furthest point
+		Point closest2 = PointConverter.convertPoint(points.get(0)); // the 2nd furthest point
+		double distance1 = closest1.distance(other);
+		double distance2 = closest2.distance(other);
+		double ptDistance;
+		for(double[] pt : points) {
+			ptDistance = other.distance(PointConverter.convertPoint(pt));
+			if(ptDistance < distance2) {
+				if(ptDistance < distance1) {
+					closest1 = PointConverter.convertPoint(pt);
+					distance1 = ptDistance;
+				} else {
+					closest2 = PointConverter.convertPoint(pt);
+					distance2 = ptDistance;
+				}
+			}
+		}
+		return new Point[]{closest1, closest2};
+	}
+
 	public double[] getFurthestPoint(double[] other) {
 		double[] furthest = points.get(0);
 		double distance = Point3d.getDistanceBetween(furthest, other);
@@ -199,6 +246,48 @@ public class Polygon3d {
 			}
 		}
 		return furthest;
+	}
+
+	public double[][] getFurthestTwoPoints(double[] other) {
+		double[] furthest1 = points.get(0); // the furthest point
+		double[] furthest2 = points.get(0); // the 2nd furthest point
+		double distance1 = Point3d.getDistanceBetween(furthest1, other);
+		double distance2 = Point3d.getDistanceBetween(furthest2, other);
+		double ptDistance;
+		for(double[] pt : points) {
+			ptDistance = Point3d.getDistanceBetween(pt, other);
+			if(ptDistance > distance2) {
+				if(ptDistance > distance1) {
+					furthest1 = pt;
+					distance1 = ptDistance;
+				} else {
+					furthest2 = pt;
+					distance2 = ptDistance;
+				}
+			}
+		}
+		return new double[][]{furthest1, furthest2};
+	}
+
+	public Point[] getFurthestTwoFlatPoints(Point other) {
+		Point furthest1 = PointConverter.convertPoint(points.get(0)); // the furthest point
+		Point furthest2 = PointConverter.convertPoint(points.get(0)); // the 2nd furthest point
+		double distance1 = furthest1.distance(other);
+		double distance2 = furthest2.distance(other);
+		double ptDistance;
+		for(double[] pt : points) {
+			ptDistance = other.distance(PointConverter.convertPoint(pt));
+			if(ptDistance > distance2) {
+				if(ptDistance > distance1) {
+					furthest1 = PointConverter.convertPoint(pt);
+					distance1 = ptDistance;
+				} else {
+					furthest2 = PointConverter.convertPoint(pt);
+					distance2 = ptDistance;
+				}
+			}
+		}
+		return new Point[]{furthest1, furthest2};
 	}
 
 	public Color getColor() {

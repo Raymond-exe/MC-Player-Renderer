@@ -70,7 +70,7 @@ public class Tetrahedron implements Groupable {
 
 
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, double delay) {
-		renderLighting(g, numSubdivisions, lightingSources, false, delay);
+		renderLighting(g, numSubdivisions, lightingSources, true, delay);
 	}
 	
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources) {

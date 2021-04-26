@@ -132,7 +132,7 @@ public class Display extends Canvas implements Runnable {
 		}
 		
 		//figure.render(g);
-		figure.renderLighting(g, 1, lights, 0.005);
+		figure.renderLighting(g, 1, lights, 0);
 		
 		g.dispose();
 		bs.show();

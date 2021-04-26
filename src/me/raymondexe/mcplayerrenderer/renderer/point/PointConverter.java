@@ -25,9 +25,8 @@ public class PointConverter {
 		double[] newVal = scale(x3d, y3d, depth);
 		int x2d = (int)(WIDTH / 2 + newVal[1]);
 		int y2d = (int)(HEIGHT / 2 - newVal[0]);
-		
-		Point point2d = new Point(x2d, y2d);
-		return point2d;
+
+		return new Point(x2d, y2d);
 	}
 	
 	private static double[] scale(double x3d, double y3d, double depth) {
