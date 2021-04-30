@@ -1,6 +1,6 @@
 package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
-import java.awt.Color;
+import java.awt.*;
 
 /** 
  * Represents a collection of Polygons
@@ -10,13 +10,14 @@ import java.awt.Color;
  * @since 0.1
 */
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
+import me.raymondexe.mcplayerrenderer.renderer.point.Line;
 import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
+import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 
 public class Tetrahedron implements Groupable {
 	
@@ -70,7 +71,7 @@ public class Tetrahedron implements Groupable {
 
 
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, double delay) {
-		renderLighting(g, numSubdivisions, lightingSources, true, delay);
+		renderLighting(g, numSubdivisions, lightingSources, false, delay);
 	}
 	
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources) {
@@ -80,7 +81,6 @@ public class Tetrahedron implements Groupable {
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, boolean gradientShading, double delay) {
 		int delayCounter = 0;
 		double miniDelay = (delay<1&&delay!=0? 1/delay : Math.max(0, delay)); // lowest delay can go is 0
-		System.out.println("Mini delay: " + miniDelay);
 
 		//TODO subdivide so that this thing is more even
 		
@@ -89,7 +89,7 @@ public class Tetrahedron implements Groupable {
 		for(Polygon3d poly : lightingTetra.polygons) {
 			double closeIntensity = lightingSources.get(0).getIntensity(poly.getClosestPoint(lightingSources.get(0).origin()));
 			double farIntensity = lightingSources.get(0).getIntensity(poly.getFurthestPoint(lightingSources.get(0).origin()));
-			
+
 			for(PointLight light : lightingSources) {
 				if(closeIntensity > light.getIntensity(poly.getAverage())) {
 					closeIntensity = light.getIntensity(poly.getAverage());
