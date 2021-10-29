@@ -16,7 +16,6 @@ import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin;
 import me.raymondexe.mcplayerrenderer.playerSkin.SkinPose;
-import me.raymondexe.mcplayerrenderer.renderer.LightingControl;
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
 import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
@@ -63,9 +62,9 @@ public class ImageConverter {
 		
 		// Preparing the player model
 		Tetrahedron playerModel = playerSkin.getFigure(10, headPitch, headYaw, skinPose).mergeAll();
-		playerModel.rotate(true, 0, 0, zRotation, LightingControl.lightVector);
-		playerModel.rotate(true, 0, yRotation, 0, LightingControl.lightVector);
-		playerModel.rotate(true, xRotation, 0, 0, LightingControl.lightVector);
+		playerModel.rotate(true, 0, 0, zRotation);
+		playerModel.rotate(true, 0, yRotation, 0);
+		playerModel.rotate(true, xRotation, 0, 0);
 		
 		//draw on graphics object
 		playerModel.renderLighting(outputImage.getGraphics(), subdivisions, lights);

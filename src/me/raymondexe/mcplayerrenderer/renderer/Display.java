@@ -162,7 +162,7 @@ public class Display extends Canvas implements Runnable {
 			
 			initialMouseX = mouse.getMouseX();
 			initialMouseY = mouse.getMouseY();
-			figure.rotate(true, -deltaY/2.0, 0, -deltaX/2.0, LightingControl.lightVector);
+			figure.rotate(true, -deltaY/2.0, 0, -deltaX/2.0);
 
 			/*
 			System.out.println(figure.getChild("HEAD"));

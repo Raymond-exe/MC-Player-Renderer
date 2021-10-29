@@ -365,12 +365,12 @@ public class PlayerSkin {
 		Tetrahedron top   =	 ImageConverter.imageToTetrahedron(get(limb, Facing.TOP, 	layers), scale, hasAlpha);
 		Tetrahedron bottom = ImageConverter.imageToTetrahedron(get(limb, Facing.BOTTOM, layers), scale, hasAlpha);
 		
-		front.rotate(true, 270, 0, 0, null);
-		back.rotate(true, 90, 180, 0, null);
-		left.rotate(true, 270, 0, 270, null);
-		right.rotate(true, 270, 0, 90, null);
-		top.rotate(true, 0, 0, 0, null);
-		bottom.rotate(true, 0, 0, 0, null);
+		front.rotate(true, 270, 0, 0);
+		back.rotate(true, 90, 180, 0);
+		left.rotate(true, 270, 0, 270);
+		right.rotate(true, 270, 0, 90);
+		top.rotate(true, 0, 0, 0);
+		bottom.rotate(true, 0, 0, 0);
 		
 		front.setLocation(0, scale*yScale, 0);
 		back.setLocation(0, -scale*yScale, 0);
@@ -430,7 +430,7 @@ public class PlayerSkin {
 		if(headPitch != null || headYaw != null) {
 			head.setLocation(0, 0, scale/2);
 			head.setRotation((headPitch==null? 0 : headPitch), 0, 0);
-			head.rotate(true, 0, 0, (headYaw==null? 0 : headYaw), null);
+			head.rotate(true, 0, 0, (headYaw==null? 0 : headYaw));
 			head.setLocation(pose[SkinPose.HEAD][SkinPose.LOCATION][0]*scale, pose[SkinPose.HEAD][SkinPose.LOCATION][1]*scale, pose[SkinPose.HEAD][SkinPose.LOCATION][2]*scale);
 		}
 		
