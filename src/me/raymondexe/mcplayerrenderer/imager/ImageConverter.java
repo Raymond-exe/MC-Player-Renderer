@@ -130,6 +130,29 @@ public class ImageConverter {
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, int width, int height) {
 		return renderSkin(playerSkin, null, 0, 0, 0, width, height, null);
 	}
+
+	/**
+	 * Applies a post-proccessing fix that should resolve
+	 * any overlapping faces and better smooths shading.
+	 * Note: currently works best with renders with a transparent background
+	 * @return
+	 */
+	private static BufferedImage postProcessRender(Tetrahedron model, BufferedImage render) {
+		
+		// for every pixel...
+		for(int y = 0; y < render.getHeight(); y++) {
+			for(int x = 0; x < render.getWidth(); x++) {
+				
+				// if pixel is transparent, skip
+				if(new Color(render.getRGB(x, y)).getAlpha() == 0) { continue; }
+
+				// generate line in 3d space representing pixel's view
+
+			}
+		}
+
+		return null; // TODO-RAY finish later lol
+	}
 	
 	/**
 	 * Turns a given image into a Tetrahedron, each colored pixel being a single Polygon.

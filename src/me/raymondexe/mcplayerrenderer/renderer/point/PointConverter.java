@@ -40,7 +40,6 @@ public class PointConverter {
 		return output;
 	}
 	
-	//TODO do method lol
 	public static void rotateXAxis(double[] p, boolean CW, double degrees) {
 		double radius = Math.sqrt(p[Point3d.Y]*p[Point3d.Y] + p[Point3d.Z]*p[Point3d.Z]);
 		double theta = Math.atan2(p[Point3d.Y], p[Point3d.Z]);
@@ -59,7 +58,6 @@ public class PointConverter {
 		p[Point3d.X] = radius*Math.sin(theta);
 	}
 	
-	//TODO do method lol
 	public static void rotateZAxis(double[] p, boolean CW, double degrees) {
 		double radius = Math.sqrt(p[Point3d.X]*p[Point3d.X] + p[Point3d.Y]*p[Point3d.Y]);
 		double theta = Math.atan2(p[Point3d.X], p[Point3d.Y]);

@@ -73,6 +73,7 @@ public class Tetrahedron implements Groupable {
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, boolean gradientShading) {
 
 		//TODO subdivide so that this thing is more even
+		//TODO NO NO BAD NO SUBDIVIDING
 		
 		Tetrahedron lightingTetra = this.subdivide(numSubdivisions);
 		Color oldPolyColor;
