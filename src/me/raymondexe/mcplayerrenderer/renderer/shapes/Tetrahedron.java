@@ -1,7 +1,5 @@
 package me.raymondexe.mcplayerrenderer.renderer.shapes;
 
-import java.awt.*;
-
 /** 
  * Represents a collection of Polygons
  * @author MeanRollerCoding (Youtube)
@@ -10,14 +8,13 @@ import java.awt.*;
  * @since 0.1
 */
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
-import me.raymondexe.mcplayerrenderer.renderer.point.Line;
 import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
-import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 
 public class Tetrahedron implements Groupable {
 	
@@ -68,19 +65,12 @@ public class Tetrahedron implements Groupable {
 	public void renderLighting(Graphics g, ArrayList<PointLight> lightingSources) {
 		renderLighting(g, 0, lightingSources);
 	}
-
-
-	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, double delay) {
-		renderLighting(g, numSubdivisions, lightingSources, false, delay);
-	}
 	
 	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources) {
 		renderLighting(g, numSubdivisions, lightingSources, false);
 	}
 	
-	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, boolean gradientShading, double delay) {
-		int delayCounter = 0;
-		double miniDelay = (delay<1&&delay!=0? 1/delay : Math.max(0, delay)); // lowest delay can go is 0
+	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, boolean gradientShading) {
 
 		//TODO subdivide so that this thing is more even
 		
@@ -108,32 +98,9 @@ public class Tetrahedron implements Groupable {
 				int farBlue = Math.max(0, Math.min(255, (int)(oldPolyColor.getBlue() - oldPolyColor.getBlue()*farIntensity)));;
 				poly.setShadedColor(new Color(farRed, farGreen, farBlue, oldPolyColor.getAlpha()));
 			}
-
-			//delay
-			if(delay<1 && delay>0) {
-				delayCounter++;
-				if(delayCounter>=miniDelay) {
-					delayCounter-= miniDelay;
-					try {
-						Thread.sleep(1);
-					} catch (Exception e) {
-						//lol
-					}
-				}
-			} else if (delay >= 1) {
-				try {
-					Thread.sleep(Math.round(miniDelay));
-				} catch (Exception e) {
-					//lol
-				}
-			}
 		}
 		
 		lightingTetra.render(g, lightingSources.get(0));
-	}
-
-	public void renderLighting(Graphics g, int numSubdivisions, ArrayList<PointLight> lightingSources, boolean gradientShading) {
-		renderLighting(g, numSubdivisions, lightingSources, gradientShading, 0);
 	}
 	
 	public void liteRender(Graphics g, int num) {

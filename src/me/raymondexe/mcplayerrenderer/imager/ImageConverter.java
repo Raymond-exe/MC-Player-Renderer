@@ -47,14 +47,14 @@ public class ImageConverter {
 		//PointConverter.FOV_SCALE = 300;
 		//PointConverter.SCALE = 0.3;
 		PointConverter.CAM_DISTANCE = 85000.0*Math.pow(PointConverter.SCALE, 0.25)/height-205;
-		PointConverter.CAM_DISTANCE /= (250.0/PointConverter.FOV_SCALE);
+		PointConverter.CAM_DISTANCE /= (250.0/PointConverter.FOV_SCALE); // wtf is this shit
 		
 		// Preparing image & graphics to draw on
-		BufferedImage bImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		
 		// Draw the background image
 		if(background != null)
-			bImage.getGraphics().drawImage(background, 0, 0, bImage.getWidth(), bImage.getHeight(), null);
+			outputImage.getGraphics().drawImage(background, 0, 0, outputImage.getWidth(), outputImage.getHeight(), null);
 		
 		// Check to make sure the skinPose exists
 		if(skinPose == null) {
@@ -68,7 +68,7 @@ public class ImageConverter {
 		playerModel.rotate(true, xRotation, 0, 0, LightingControl.lightVector);
 		
 		//draw on graphics object
-		playerModel.renderLighting(bImage.getGraphics(), subdivisions, lights, delay);
+		playerModel.renderLighting(outputImage.getGraphics(), subdivisions, lights);
 
 		if(ATTEMPT_GARBAGE_COLLECTION) {
 			//delete all the shit used to render this
@@ -78,7 +78,7 @@ public class ImageConverter {
 			System.gc();
 		}
 
-		return bImage; //return image
+		return outputImage; //return image
 		
 	}
 
@@ -201,6 +201,4 @@ public class ImageConverter {
 		}
 	}
 	//*/
-	
-	
 }
