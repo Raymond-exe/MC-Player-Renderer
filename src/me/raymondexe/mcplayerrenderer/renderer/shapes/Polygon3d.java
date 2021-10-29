@@ -24,7 +24,6 @@ import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 
 public class Polygon3d {
-	//private static final double AMBIENT_LIGHTING = 0.05;
 
 	private Color baseColor;
 	private Color shadedColor;
@@ -105,14 +104,12 @@ public class Polygon3d {
 		return new double[] {getXAverage(), getYAverage(), getZAverage()};
 	}
 	
-	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector) {
+	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation) {
 		for (double[] p : points) {
 			PointConverter.rotateXAxis(p, CW, xRotation);
 			PointConverter.rotateYAxis(p, CW, yRotation);
 			PointConverter.rotateZAxis(p, CW, zRotation);
 		}
-		
-		updateLighting(lightVector);
 		
 	}
 	
@@ -376,32 +373,6 @@ public class Polygon3d {
 		return output;
 			
 	}
-	
-	private void updateLighting(Vector3d lightVector) {
-		/*
-		if(points.size() < 3 || lightVector == null) {
-			//TODO ?
-			return;
-		}
-		
-		Vector3d normal = getNormal();
-		
-		double dot = Vector3d.dot(normal, lightVector);
-		double sign = (dot<0? -1 : 1);
-		dot = sign*dot*dot;
-		System.out.println("Dot: " + dot);
-		
-		dot = (dot+1) / 2 * 0.95;
-		
-		double lightRatio = AMBIENT_LIGHTING + dot;
-		
-		//Updating lightColor
-		int r = (int)(baseColor.getRed()*lightRatio);
-		int g = (int)(baseColor.getGreen()*lightRatio);
-		int b = (int)(baseColor.getBlue()*lightRatio);
-		lightColor = new Color(r, g, b, baseColor.getAlpha());
-		//*/
-	}	
 	
 	public Polygon3d copy() {
 		return new Polygon3d(baseColor, points);

@@ -115,13 +115,13 @@ public class Tetrahedron implements Groupable {
 		}
 	}
 	
-	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector) {
+	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation) {
 		this.xRotation+=xRotation;
 		this.yRotation+=yRotation;
 		this.zRotation+=zRotation;
 		
 		for(Polygon3d poly : polygons) {
-			poly.rotate(CW, xRotation, yRotation, zRotation, lightVector);
+			poly.rotate(CW, xRotation, yRotation, zRotation);
 		}
 		sortPolygons();
 	}
@@ -132,12 +132,12 @@ public class Tetrahedron implements Groupable {
 		double deltaY = yRotation-this.yRotation;
 		double deltaZ = zRotation-this.zRotation;
 		
-		rotate(true, deltaX, deltaY, deltaZ, null);
+		rotate(true, deltaX, deltaY, deltaZ);
 	}
 
 	@Override
 	public void resetRotation() {
-		rotate(false, xRotation, yRotation, zRotation, null);
+		rotate(false, xRotation, yRotation, zRotation);
 		xRotation = 0;
 		yRotation = 0;
 		zRotation = 0;

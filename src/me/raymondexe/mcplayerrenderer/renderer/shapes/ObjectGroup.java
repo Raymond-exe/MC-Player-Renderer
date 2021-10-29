@@ -369,7 +369,7 @@ public class ObjectGroup implements Groupable {
 	 * @param yRotation The rotation, in degrees, along the y-axis
 	 * @param zRotation The rotation, in degrees, along the z-axis
 	 */
-	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation, Vector3d lightVector) {
+	public void rotate(boolean CW, double xRotation, double yRotation, double zRotation) {
 		if(!CW) {
 			xRotation*=-1;
 			yRotation*=-1;
@@ -386,7 +386,7 @@ public class ObjectGroup implements Groupable {
 		//resetLocation();
 		
 		for(Groupable g : children) {
-			g.rotate(CW, xRotation, yRotation, zRotation, lightVector);
+			g.rotate(CW, xRotation, yRotation, zRotation);
 		}
 		
 		//move(tempX, tempY, tempZ);
@@ -402,7 +402,7 @@ public class ObjectGroup implements Groupable {
 	public void setRotation(double xRotation, double yRotation, double zRotation) {
 		resetRotation();
 		
-		rotate(true, xRotation, yRotation, zRotation, null);		
+		rotate(true, xRotation, yRotation, zRotation);		
 	}
 
 	@Override
@@ -410,7 +410,7 @@ public class ObjectGroup implements Groupable {
 	 * Resets this ObjectGroup's rotation
 	 */
 	public void resetRotation() {
-		rotate(true, -this.xRotation, -this.yRotation, -this.zRotation, null);		
+		rotate(true, -this.xRotation, -this.yRotation, -this.zRotation);		
 	}
 	
 	/**
