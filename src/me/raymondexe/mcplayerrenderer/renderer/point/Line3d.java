@@ -9,16 +9,20 @@ public class Line3d {
         pointA = ptA;
         pointB = ptB;
     }
-
-    public double getYSlope() {
-        double deltaX = pointA[0] - pointB[0];
-        double deltaY = pointA[1] - pointB[1];
-        return deltaY/deltaX;
+    
+    public double getXAt(double t) {
+        return pointA[0] + t*(pointB[0]-pointA[0]);
+    }
+    
+    public double getYAt(double t) {
+        return pointA[1] + t*(pointB[1]-pointA[1]);
+    }
+    
+    public double getZAt(double t) {
+        return pointA[2] + t*(pointB[2]-pointA[2]);
     }
 
-    public double getZSlope() {
-        double deltaX = pointA[0] - pointB[0];
-        double deltaZ = pointA[2] - pointB[2];
-        return deltaZ/deltaX;
+    public double[] pointAt(double t) {
+        return new double[]{getXAt(t), getYAt(t), getZAt(t)};
     }
 }
