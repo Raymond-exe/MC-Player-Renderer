@@ -286,18 +286,25 @@ public class Polygon3d {
 		Vector3d normal = getNormal();
 		double[] pt = points.get(0);
 
-		double deltaX = normal.getX(); // "a"
-		double deltaY = normal.getY(); // "b"
-		double deltaZ = normal.getZ(); // "c"
+		// a, b, c, & d as from standard equation for a plane:
+		// `a*x + b*y + c*z + d = 0`
+		double a = normal.getX();
+		double b = normal.getY();
+		double c = normal.getZ();
+		double d = -1*(a*pt[0] + b*pt[1] + c*pt[2]);
 
-		           // = -1*(   a * x0    +    b * y0    +    c * z0    )
-		double dValue = -1*(deltaX*pt[0] + deltaY*pt[1] + deltaZ*pt[2]); // "d"
+		// just shorthand for x1-x0, y1-y0, & z1-z0 respectively
+		double xDiff = line.pointDifference(0);
+		double yDiff = line.pointDifference(1);
+		double zDiff = line.pointDifference(2);
 
-		/* equation for double `t` below equates to:
-		t = (-a*x0 - b*y0 - c*z0) / (a(x0-x1) + b(y0-y1) + c(z0-z1))
-		*/
-		double t = -1 * (deltaX*line.pointA[0] + deltaY*line.pointA[1] + deltaZ*line.pointA[2] + dValue) /    // numerator
-				   (deltaX*line.pointDifference(0) + deltaY*line.pointDifference(1) + deltaZ*line.pointDifference(2)); // denominator
+		// equation for double `t` below equates to:
+		// 	t = (-a*x0 - b*y0 - c*z0) / (a(x0-x1) + b(y0-y1) + c(z0-z1))
+		// given that:
+		// 	- a, b, & c are components of the normal vector
+		// 	- (x0,y0,z0) & (x1,y1,z1) are points on the parameterized line
+		double t = (-a*line.pointA[0] - b*line.pointA[1] - c*line.pointA[2] - d) /    // numerator
+				   ( a*xDiff 	 + 		b*yDiff 	+  	   c*zDiff ); // denominator
 
 		return line.getPointAt(t);
 	}
