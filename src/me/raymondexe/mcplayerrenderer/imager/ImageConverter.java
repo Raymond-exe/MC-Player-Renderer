@@ -9,14 +9,19 @@ package me.raymondexe.mcplayerrenderer.imager;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
 //import java.io.File;
 //import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin;
 import me.raymondexe.mcplayerrenderer.playerSkin.SkinPose;
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
+import me.raymondexe.mcplayerrenderer.renderer.point.Line3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 import me.raymondexe.mcplayerrenderer.renderer.shapes.Polygon3d;
@@ -77,8 +82,8 @@ public class ImageConverter {
 			System.gc();
 		}
 
-		return outputImage; //return image
-		
+		// return outputImage; //return image
+		return postProcessRender(playerModel, outputImage);
 	}
 
 	public static BufferedImage renderSkin(PlayerSkin playerSkin, SkinPose skinPose, Float headPitch, Float headYaw, ArrayList<PointLight> lights, double xRotation, double yRotation, double zRotation, int subdivisions, int width, int height, BufferedImage background) {
@@ -134,11 +139,15 @@ public class ImageConverter {
 	 * Applies a post-proccessing fix that should resolve
 	 * any overlapping faces and better smooths shading.
 	 * Note: currently works best with renders with a transparent background
-	 * @return
+	 * @return a BufferedImage with smoother distance-shading and surfaces displaying properly
 	 */
 	private static BufferedImage postProcessRender(Tetrahedron model, BufferedImage render) {
+		double[] camera_pos = PointConverter.getCameraPosition(); //TODO-RAY find camera position
 		
+		Line3d line = null;
+		HashMap<double[], Polygon3d> intersectingPolygons;
 		// for every pixel...
+		long timer = System.currentTimeMillis();
 		for(int y = 0; y < render.getHeight(); y++) {
 			for(int x = 0; x < render.getWidth(); x++) {
 				
@@ -146,11 +155,52 @@ public class ImageConverter {
 				if(new Color(render.getRGB(x, y)).getAlpha() == 0) { continue; }
 
 				// generate line in 3d space representing pixel's view
+				line = new Line3d(camera_pos, Point3d.origin()); //TODO-RAY this lmfao
 
+				intersectingPolygons = new HashMap<>();
+				for(Polygon3d poly : model.getPolygons()) {
+					double[] intersect = poly.getIntersectionPoint(line);
+					if(poly.boundingPointsContains(intersect)) {
+						intersectingPolygons.put(intersect, poly);
+					}
+				}
+
+				double[] nearest = (double[])intersectingPolygons.keySet().toArray()[0];
+				double minDistance = Point3d.getDistanceBetween(camera_pos, nearest);
+				for(double[] intersect : intersectingPolygons.keySet()) {
+					if(Point3d.getDistanceBetween(camera_pos, intersect) < minDistance) {
+						minDistance = Point3d.getDistanceBetween(camera_pos, intersect);
+						nearest = intersect;
+					}
+				}
+
+				Color baseColor = intersectingPolygons.get(nearest).getColor();
+				double lightIntensity = 0; //TODO this
+				int red  = Math.max(0, Math.min(255, (int)(baseColor.getRed() - baseColor.getRed()*lightIntensity)));
+				int green= Math.max(0, Math.min(255, (int)(baseColor.getGreen() - baseColor.getGreen()*lightIntensity)));
+				int blue = Math.max(0, Math.min(255, (int)(baseColor.getBlue() - baseColor.getBlue()*lightIntensity)));
+				render.setRGB(x, y, rgbToInt(red, green, blue));
 			}
+			System.out.println("Y:" + y + "... Time: " + (System.currentTimeMillis() - timer)/1000.0 + "s");
+			timer = System.currentTimeMillis();
 		}
 
-		return null; // TODO-RAY finish later lol
+		return render;
+	}
+
+	private static int rgbToInt(int red, int green, int blue) {
+		int rgb = red;
+		rgb = (rgb << 8) + green;
+		rgb = (rgb << 8) + blue;
+		return rgb;
+	}
+
+	private static int[] intToRgb(int rgb) {
+		return new int[]{
+			(rgb >> 16) & 0xFF, //red
+			(rgb >> 8) & 0xFF,  // green
+			(rgb) & 0xFF 	   // blue
+		};
 	}
 	
 	/**
@@ -202,23 +252,20 @@ public class ImageConverter {
 	}
 	
 	
-	/*
+	//*
 	// main method to test stuff
 	public static void main(String[] args) {
 		try {
-			for(int i = 500; i <= 5000; i+=500) {
-				int width = i;
-				int height = i;
-				String imageName = "renders/img_" + width + "x" + height + ".png";
-				
-				BufferedImage img = renderSkin(new PlayerSkin("85f27c00d8a746e8bc9c68cd34b149a9"), SkinPose.sitting(), -15, 0, -30, width, height);
-				
-				ImageIO.write(img, "png", new File(imageName));
-				
-				System.out.println("Wrote image \"" + imageName + "\" successfully.");
-				
-			}
-		} catch (IOException e) {
+			int width = 1000;
+			int height = 1000;
+			String imageName = "renders/img_" + width + "x" + height + ".png";
+			
+			BufferedImage img = renderSkin(new PlayerSkin("85f27c00d8a746e8bc9c68cd34b149a9"), SkinPose.sitting(), -15, 0, -30, width, height);
+			
+			ImageIO.write(img, "png", new File(imageName));
+			
+			System.out.println("Wrote image \"" + imageName + "\" successfully.");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

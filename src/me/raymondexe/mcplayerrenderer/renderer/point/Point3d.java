@@ -21,6 +21,10 @@ public class Point3d {
 		return new double[]{x, y, z};
 	}
 
+	public static double[] origin() {
+		return new double[]{0,0,0};
+	}
+
 	public static boolean checkEquality(double[] ptA, double[] ptB) {
 		return (
 				ptA[X] == ptB[X]

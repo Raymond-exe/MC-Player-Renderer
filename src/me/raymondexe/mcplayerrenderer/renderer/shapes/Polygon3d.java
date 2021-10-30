@@ -299,7 +299,7 @@ public class Polygon3d {
 		double zDiff = line.pointDifference(2);
 
 		// equation for double `t` below equates to:
-		// 	t = (-a*x0 - b*y0 - c*z0) / (a(x0-x1) + b(y0-y1) + c(z0-z1))
+		// 	t = (-a*x0 - b*y0 - c*z0) / (a(x1-x0) + b(y1-y0) + c(z1-z0))
 		// given that:
 		// 	- a, b, & c are components of the normal vector
 		// 	- (x0,y0,z0) & (x1,y1,z1) are points on the parameterized line

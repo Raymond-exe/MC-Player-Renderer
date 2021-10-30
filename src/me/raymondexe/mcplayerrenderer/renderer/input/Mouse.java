@@ -45,7 +45,8 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent event) {
-		PointConverter.adjustZoom(-event.getUnitsToScroll()*0.1);
+		PointConverter.CAM_DISTANCE += event.getUnitsToScroll();
+		//PointConverter.adjustZoom(-event.getUnitsToScroll()*0.1);
 	}
 
 	@Override

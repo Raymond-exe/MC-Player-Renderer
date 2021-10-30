@@ -250,22 +250,25 @@ public class ObjectGroup implements Groupable {
 	 * Adds new Groupable objects to this ObjectGroup.
 	 * @param group Groupable objects to add.
 	 */
-	public void add(Groupable... group) {
+	public ObjectGroup add(Groupable... group) {
 		for(Groupable g : group) {
 			children.add(g);
 			g.setParent(this);
 		}
+		return this;
 	}
 	
 	/**
 	 * Adds new Groupable objects to this ObjectGroup.
 	 * @param group Groupable objects to add.
 	 */
-	public void add(List<Groupable> group) {
+	public ObjectGroup add(List<Groupable> group) {
 		for(Groupable g : group) {
 			children.add(g);
 			g.setParent(this);
-		}		
+		}
+
+		return this;
 	}
 	
 	/**

@@ -69,6 +69,33 @@ public class Shapes {
 		return prism;
 	}
 
+	public static Tetrahedron getGrid(int xScale, int yScale, int zScale) {
+		double cubeSize = 0.5;
+
+		ObjectGroup output =  new ObjectGroup();
+
+		Tetrahedron temp;
+		for(int x = -xScale; x < xScale; x++) {
+			temp = getCube(cubeSize);
+			temp.move(x, 0, 0);
+			output.add(temp);
+		}
+
+		for(int y = -yScale; y < yScale; y++) {
+			temp = getCube(cubeSize);
+			temp.move(0, y, 0);
+			output.add(temp);
+		}
+
+		for(int z = -zScale; z < xScale; z++) {
+			temp = getCube(cubeSize);
+			temp.move(0, 0, z);
+			output.add(temp);
+		}
+
+		return output.mergeAll();
+	}
+
 	/**
 	 * A minecraft-like 3D figure
 	 * @param scale The scale the figure should be

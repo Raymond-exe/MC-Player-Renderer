@@ -13,7 +13,7 @@ import java.awt.Point;
 public class PointConverter {
 
 	public static double SCALE = 1;
-	public static int FOV_SCALE = 250;
+	public static int FOV_SCALE = 80;
 	public static double CAM_DISTANCE = 15; //defaults to 15
 	public static int WIDTH;
 	public static int HEIGHT;
@@ -90,6 +90,10 @@ public class PointConverter {
 	
 	public static void setCameraDistance(double d) {
 		CAM_DISTANCE = d;
+	}
+
+	public static double[] getCameraPosition() {
+		return new double[]{0, CAM_DISTANCE, 0};
 	}
 	
 }

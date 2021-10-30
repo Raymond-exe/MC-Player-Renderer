@@ -23,6 +23,7 @@ import me.raymondexe.mcplayerrenderer.playerSkin.PlayerSkin.SkinConfig;
 import me.raymondexe.mcplayerrenderer.renderer.input.Mouse;
 import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
+import me.raymondexe.mcplayerrenderer.renderer.shapes.Shapes;
 import me.raymondexe.mcplayerrenderer.renderer.shapes.Tetrahedron;
 
 public class Display extends Canvas implements Runnable {
@@ -46,7 +47,7 @@ public class Display extends Canvas implements Runnable {
 	
 	public Display() {
 		this.jFrame = new JFrame();
-		this.setPreferredSize(new Dimension(1280, 720));
+		this.setPreferredSize(new Dimension(720, 720));
 		
 		mouse = new Mouse();
 		
@@ -65,11 +66,12 @@ public class Display extends Canvas implements Runnable {
 		display.jFrame.setResizable(true);
 		display.jFrame.setVisible(true);
 		
-		PlayerSkin skin = new PlayerSkin("7db73360529c4728893540e62334226c", SkinConfig.ALEX);
+		PlayerSkin skin = new PlayerSkin("7db73360529c4728893540e62334226c", SkinConfig.STEVE);
 		
 		SkinPose pose = new SkinPose("demo", SkinPose.standing().getValues());
 		
-		figure = skin.getFigure(10, pose).mergeAll().subdivide(SUBDIVISIONS);
+		//figure = skin.getFigure(10, pose).mergeAll().subdivide(SUBDIVISIONS);
+		figure = Shapes.getGrid(10, 10, 10);
 		figure.resetLocation();
 		display.start();
 	}
@@ -104,7 +106,7 @@ public class Display extends Canvas implements Runnable {
 				delta--;
 				render();
 				frames++;
-				jFrame.setTitle(title + " | " + frames + " frames | Points: " + Point3d.getPointCount());
+				jFrame.setTitle(title + " | FOV: " + PointConverter.FOV_SCALE + " | Zoom: " + PointConverter.SCALE + " | Distance: " + PointConverter.CAM_DISTANCE);
 			}
 		}
 	}
@@ -112,8 +114,8 @@ public class Display extends Canvas implements Runnable {
 	private void render() {
 		PointConverter.WIDTH = this.getWidth();
 		PointConverter.HEIGHT = this.getHeight();
-		PointConverter.CAM_DISTANCE = 85000.0*Math.pow(PointConverter.SCALE, 0.25)/(getHeight())-205;
-		PointConverter.CAM_DISTANCE /= (250.0/PointConverter.FOV_SCALE);
+		//PointConverter.CAM_DISTANCE = 85000.0*Math.pow(PointConverter.SCALE, 0.25)/(getHeight())-205;
+		//PointConverter.CAM_DISTANCE /= (250.0/PointConverter.FOV_SCALE);
 		
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {

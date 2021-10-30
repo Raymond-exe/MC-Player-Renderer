@@ -8,6 +8,7 @@ public class Line3d {
     public Line3d(double[] ptA, double[] ptB) {
         pointA = ptA;
         pointB = ptB;
+        // System.out.println("Created line: " + doubleArray(ptA) + " -> " + doubleArray(ptB));
     }
     
     public double getXAt(double t) {
@@ -38,5 +39,19 @@ public class Line3d {
         return "x(t) = " + pointA[0] + " + t(" + pointB[0] + " - " + pointA[0] + ")\n"
         + "y(t) = " + pointA[1] + " + t(" + pointB[1] + " - " + pointA[1] + ")\n"
         + "z(t) = " + pointA[2] + " + t(" + pointB[2] + " - " + pointA[2] + ")";
+    }
+
+    // used for printing out double arrays
+    private static String doubleArray(double[] arr) {
+        if(arr.length == 0) {
+            return "{}";
+        }
+
+        String str = "{";
+        for(double d : arr) {
+            str += d + ", ";
+        }
+
+        return str.substring(0, str.length()-2) + "}";
     }
 }
