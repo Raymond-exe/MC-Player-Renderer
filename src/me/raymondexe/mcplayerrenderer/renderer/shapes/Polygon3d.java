@@ -20,6 +20,7 @@ import java.util.List;
 
 import me.raymondexe.mcplayerrenderer.renderer.PointLight;
 import me.raymondexe.mcplayerrenderer.renderer.point.Line;
+import me.raymondexe.mcplayerrenderer.renderer.point.Line3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.Point3d;
 import me.raymondexe.mcplayerrenderer.renderer.point.PointConverter;
 
@@ -117,68 +118,70 @@ public class Polygon3d {
 		double yMax = points.get(0)[Point3d.Y];
 		
 		for(double[] p : points) {
-			if(p[Point3d.Y] > yMax)
-				yMax = p[Point3d.Y];
+			yMax = Math.max(yMax, p[Point3d.Y]);
 		}
 		
 		return yMax;
 	}
 	
 	public double getYMin() {
-		double yMax = points.get(0)[Point3d.Y];
+		double yMin = points.get(0)[Point3d.Y];
 
 		for(double[] p : points) {
-			if(p[Point3d.Y] < yMax)
-				yMax = p[Point3d.Y];
+			yMin = Math.min(yMin, p[Point3d.Y]);
 		}
 
-		return yMax;
+		return yMin;
 	}
 	
 	public double getXMax() {
 		double xMax = points.get(0)[Point3d.X];
 
 		for(double[] p : points) {
-			if(p[Point3d.X] > xMax)
-				xMax = p[Point3d.X];
+			xMax = Math.max(xMax, p[Point3d.X]);
 		}
 
 		return xMax;
 	}
 	
 	public double getXMin() {
-		double xMax = points.get(0)[Point3d.X];
+		double xMin = points.get(0)[Point3d.X];
 
 		for(double[] p : points) {
-			if(p[Point3d.X] < xMax)
-				xMax = p[Point3d.X];
+			xMin = Math.min(xMin, p[Point3d.X]);
 		}
 
-		return xMax;
+		return xMin;
 	}
 	
 	public double getZMax() {
 		double zMax = points.get(0)[Point3d.Z];
 
 		for(double[] p : points) {
-			if(p[Point3d.Z] > zMax)
-				zMax = p[Point3d.Z];
+			zMax = Math.max(zMax, p[Point3d.Z]);
 		}
 
 		return zMax;
 	}
 	
 	public double getZMin() {
-		double zMax = points.get(0)[Point3d.Z];
+		double zMin = points.get(0)[Point3d.Z];
 
 		for(double[] p : points) {
-			if(p[Point3d.Z] < zMax)
-				zMax = p[Point3d.Z];
+			zMin = Math.min(zMin, p[Point3d.Z]);
 		}
 
-		return zMax;
+		return zMin;
 	}
-	
+
+	public boolean boundingPointsContains(double[] point3d) {
+		return (
+				point3d[0] > getXMin() && point3d[0] < getXMax() &&
+						point3d[1] > getYMin() && point3d[1] < getYMax() &&
+						point3d[2] > getZMin() && point3d[2] < getZMax()
+		);
+	}
+
 	public double[] getClosestPoint(double[] other) {
 		double[] closest = points.get(0);
 		double distance = Point3d.getDistanceBetween(closest, other);
@@ -189,27 +192,6 @@ public class Polygon3d {
 			}
 		}
 		return closest;
-	}
-
-	public double[][] getClosestTwoPoints(double[] other) {
-		double[] closest1 = points.get(0); // the furthest point
-		double[] closest2 = points.get(0); // the 2nd furthest point
-		double distance1 = Point3d.getDistanceBetween(closest1, other);
-		double distance2 = Point3d.getDistanceBetween(closest2, other);
-		double ptDistance;
-		for(double[] pt : points) {
-			ptDistance = Point3d.getDistanceBetween(pt, other);
-			if(ptDistance < distance2) {
-				if(ptDistance < distance1) {
-					closest1 = pt;
-					distance1 = ptDistance;
-				} else {
-					closest2 = pt;
-					distance2 = ptDistance;
-				}
-			}
-		}
-		return new double[][]{closest1, closest2};
 	}
 
 	public Point[] getClosestTwoFlatPoints(Point other) {
@@ -243,27 +225,6 @@ public class Polygon3d {
 			}
 		}
 		return furthest;
-	}
-
-	public double[][] getFurthestTwoPoints(double[] other) {
-		double[] furthest1 = points.get(0); // the furthest point
-		double[] furthest2 = points.get(0); // the 2nd furthest point
-		double distance1 = Point3d.getDistanceBetween(furthest1, other);
-		double distance2 = Point3d.getDistanceBetween(furthest2, other);
-		double ptDistance;
-		for(double[] pt : points) {
-			ptDistance = Point3d.getDistanceBetween(pt, other);
-			if(ptDistance > distance2) {
-				if(ptDistance > distance1) {
-					furthest1 = pt;
-					distance1 = ptDistance;
-				} else {
-					furthest2 = pt;
-					distance2 = ptDistance;
-				}
-			}
-		}
-		return new double[][]{furthest1, furthest2};
 	}
 
 	public Point[] getFurthestTwoFlatPoints(Point other) {
@@ -315,11 +276,32 @@ public class Polygon3d {
 	
 	public Vector3d getNormal() {
 		Vector3d v1 = new Vector3d(points.get(0), points.get(1));
-		Vector3d v2 = new Vector3d(points.get(1), points.get(2));
+		Vector3d v2 = new Vector3d(points.get(0), points.get(2));
 		
-		return Vector3d.normalize(Vector3d.cross(v2, v1));
+		return Vector3d.cross(v2, v1);
 	}
-	
+
+	// this is only a little bit of a clusterfuck of math
+	public double[] getIntersectionPoint(Line3d line) {
+		Vector3d normal = getNormal();
+		double[] pt = points.get(0);
+
+		double deltaX = normal.getX(); // "a"
+		double deltaY = normal.getY(); // "b"
+		double deltaZ = normal.getZ(); // "c"
+
+		           // = -1*(   a * x0    +    b * y0    +    c * z0    )
+		double dValue = -1*(deltaX*pt[0] + deltaY*pt[1] + deltaZ*pt[2]); // "d"
+
+		/* equation for double `t` below equates to:
+		t = (-a*x0 - b*y0 - c*z0) / (a(x0-x1) + b(y0-y1) + c(z0-z1))
+		*/
+		double t = -1 * (deltaX*line.pointA[0] + deltaY*line.pointA[1] + deltaZ*line.pointA[2] + dValue) /    // numerator
+				   (deltaX*line.pointDifference(0) + deltaY*line.pointDifference(1) + deltaZ*line.pointDifference(2)); // denominator
+
+		return line.getPointAt(t);
+	}
+
 	public Tetrahedron subdivide(int numSubdivisions) {
 		if(numSubdivisions<=0 || points.size() < 3)
 			return new Tetrahedron(this);
