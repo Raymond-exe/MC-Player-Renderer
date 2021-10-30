@@ -316,9 +316,8 @@ public class Polygon3d {
 	public Vector3d getNormal() {
 		Vector3d v1 = new Vector3d(points.get(0), points.get(1));
 		Vector3d v2 = new Vector3d(points.get(1), points.get(2));
-		Vector3d normal = Vector3d.normalize(Vector3d.cross(v2, v1));
 		
-		return normal;
+		return Vector3d.normalize(Vector3d.cross(v2, v1));
 	}
 	
 	public Tetrahedron subdivide(int numSubdivisions) {
