@@ -32,4 +32,11 @@ public class Line3d {
     public double[] getPointAt(double t) {
         return new double[]{getXAt(t), getYAt(t), getZAt(t)};
     }
+
+    @Override
+    public String toString() {
+        return "x(t) = " + pointA[0] + " + t(" + pointB[0] + " - " + pointA[0] + ")\n"
+        + "y(t) = " + pointA[1] + " + t(" + pointB[1] + " - " + pointA[1] + ")\n"
+        + "z(t) = " + pointA[2] + " + t(" + pointB[2] + " - " + pointA[2] + ")";
+    }
 }
