@@ -62,7 +62,7 @@ public class Vector3d {
 	public static Vector3d cross(Vector3d v1, Vector3d v2) {
 		return new Vector3d(
 				v1.getY()*v2.getZ() - v1.getZ()*v2.getY(),
-				v1.getZ()*v2.getX() - v1.getX()*v2.getZ(),
+				v1.getX()*v2.getZ() - v1.getZ()*v2.getX(),
 				v1.getX()*v2.getY() - v1.getY()*v2.getX()
 				);
 	}
