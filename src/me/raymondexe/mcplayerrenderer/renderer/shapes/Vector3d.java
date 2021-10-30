@@ -13,8 +13,7 @@ public class Vector3d {
 	}
 	
 	public Vector3d(double x, double y, double z) {
-		start = Point3d.createPoint(0, 0, 0);
-		end = Point3d.createPoint(x, y, z);
+		this(Point3d.createPoint(0, 0, 0), Point3d.createPoint(x, y, z));
 	}
 	
 	public double[] getStart() {
@@ -42,8 +41,7 @@ public class Vector3d {
 	}
 	
 	public double getMagnitude() {
-		double magnitude = Math.sqrt(getX()*getX() + getY()*getY() + getZ()*getZ());
-		return magnitude;
+		return Math.sqrt(getX()*getX() + getY()*getY() + getZ()*getZ());
 	}
 	
 	public String toString() {
